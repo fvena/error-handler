@@ -1,7 +1,7 @@
 {
-  "name": "error-handler",
+  "name": "handler-error",
   "version": "0.1.0",
-  "description": "error-handler is a modular and type-safe TypeScript library that simplifies creating and managing custom errors, promoting best practices for large-scale projects.",
+  "description": "Handler-Error is a modular and type-safe TypeScript library that simplifies creating and managing custom errors, promoting best practices for large-scale projects.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -43,13 +43,13 @@
     "template"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/fvena/error-handler#readme",
+  "homepage": "https://github.com/fvena/handler-error#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fvena/error-handler.git"
+    "url": "git+https://github.com/fvena/handler-error.git"
   },
   "bugs": {
-    "url": "https://github.com/fvena/error-handler/issues"
+    "url": "https://github.com/fvena/handler-error/issues"
   },
   "author": "Francisco Vena <fvena32@gmail.com> (https://www.fvena.com)",
   "engines": {
