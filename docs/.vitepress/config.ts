@@ -2,8 +2,9 @@ import { defineConfig } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: "/your-repository-name/",
-  description: "A VitePress Site",
+  base: "/error-handler/",
+  description:
+    "error-handler is a modular and type-safe TypeScript library that simplifies creating and managing custom errors, promoting best practices for large-scale projects.",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -23,5 +24,5 @@ export default defineConfig({
 
     socialLinks: [{ icon: "github", link: "https://github.com/vuejs/vitepress" }],
   },
-  title: "My Awesome Project",
+  title: "Error-Handler",
 });
