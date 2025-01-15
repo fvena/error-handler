@@ -1,5 +1,6 @@
-import type { ErrorType, Severity } from "./types";
+import type { ErrorType, Severity, StackFrame } from "./types";
 import crypto from "node:crypto";
+import { formatStack } from "./utils/stack";
 import { validateErrorType, validateSeverity, validateTimestamp } from "./utils/validations";
 
 /**
@@ -26,6 +27,7 @@ export class HandlerError extends Error {
   // Additional properties
   private _example?: string; // Example of how to resolve the error.
   private _metadata: Record<string, unknown> = {}; // Additional metadata for the error.
+  private _stackTrace: StackFrame[] = []; // Stack trace of the error.
   private _values: Record<string, unknown> = {}; // Values associated with the error.
 
   /**
@@ -41,6 +43,13 @@ export class HandlerError extends Error {
     this._timestamp = new Date();
     this._description = message;
 
+    if (this.stack) {
+      this._stackTrace = formatStack(this.stack);
+      this._method = this._stackTrace[0]?.method ?? undefined;
+      this._file = this._stackTrace[0]?.file ?? undefined;
+    }
+
+    // Ensures the prototype chain is correctly set to HandlerError.
     Object.setPrototypeOf(this, HandlerError.prototype);
   }
 
@@ -88,6 +97,10 @@ export class HandlerError extends Error {
 
   get solution() {
     return this._solution;
+  }
+
+  get stackTrace() {
+    return this._stackTrace;
   }
 
   get timestamp() {
@@ -193,7 +206,7 @@ export class HandlerError extends Error {
       name: this.name,
       severity: this._severity,
       solution: this._solution,
-      stack: this.stack,
+      stackTrace: this._stackTrace,
       timestamp: this._timestamp,
       type: this._type,
       values: this._values,

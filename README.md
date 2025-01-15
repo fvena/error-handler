@@ -15,9 +15,9 @@
 
 [![SemVer](https://img.shields.io/npm/v/handler-error)](https://www.npmjs.com/package/handler-error)
 [![npm bundle size](https://img.shields.io/bundlephobia/min/fvena/handler-error)](https://bundlephobia.com/package/handler-error)
-[![Build Status](https://github.com/fvena/handler-error/workflows/CI%2FCD/badge.svg)]()
-[![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![Live Docs](https://img.shields.io/badge/docs-online-success.svg)](https://#)
+[![Build Status](https://github.com/fvena/handler-error/workflows/CI%2FCD/badge.svg)](https://github.com/fvena/handler-error/actions)
+[![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/fvena/handler-error/actions)
+[![Live Docs](https://img.shields.io/badge/docs-online-success.svg)](<[https://#](https://github.com/fvena/handler-error#readme)>)
 
 <!-- markdownlint-enable MD042 -->
 
@@ -46,7 +46,7 @@
 
 Ensure you have the latest version of npm installed and a supported version of Node.js:
 
-- "Node.js": >=14.0.0
+- "Node.js": >=22.0.0
 - "Browser Compatibility": Modern browsers (Chrome, Firefox, Edge, Safari)
 
 ### Installation
@@ -76,11 +76,22 @@ pnpm add handler-error
 ```typescript
 import { HandlerError } from "handler-error";
 
-class CustomError extends HandlerError {
+class AppError extends HandlerError {
   constructor(message) {
     super(message);
     this.name = "AppError";
+
+    // Ensures the prototype chain is correctly set to HandlerError.
+    Object.setPrototypeOf(this, AppError.prototype);
   }
+}
+```
+
+### Type Guard
+
+```typescript
+function (error: Error): error is AppError {
+  return error instanceof AppError;
 }
 ```
 
@@ -90,9 +101,9 @@ class CustomError extends HandlerError {
 function processRequest() {
   try {
     // Simulate an error
-    throw new HandlerError("Request failed").setContext("API request");
+    throw new AppError("Request failed").setContext("API request");
   } catch (err) {
-    if (err instanceof AppError) {
+    if isAppError(err) {
       err.log("detail");
     } else {
       console.error("Unknown error:", err);
@@ -104,7 +115,7 @@ function processRequest() {
 ### Launch detailed custom error
 
 ```typescript
-throw new CustomError("Invalid email address provided.")
+throw new AppError("Invalid email address provided.")
   .setLibrary("playground")
   .setErrorCode("INVALID_EMAIL")
   .setContext("The email entered during the registration process is invalid.")
@@ -116,20 +127,11 @@ throw new CustomError("Invalid email address provided.")
   .setExample("user@example.com");
 ```
 
-### Using TypeScript with Type Annotations
+### Handling errors with a custom handler
 
 ```typescript
-import { HandlerError } from "handler-error";
-
-class AppError extends HandlerError {
-  constructor(message: string) {
-    super(message);
-    this.name = "AppError";
-  }
-}
-
 function handleError(error: Error) {
-  if (error instanceof AppError) {
+  if isAppError(err) {
     console.error("AppError:", error);
   } else {
     console.error("Unknown error:", error);
@@ -257,9 +259,15 @@ We welcome contributions! Here's how you can get involved:
 
 1. Fork the repository.
 1. Create a feature branch: `git checkout -b feature/<your-feature>`.
+1. Install dependencies: `npm install`.
+1. Make your changes.
+1. Ensure tests pass: `npm test`.
+1. Check code style: `npm run lint`.
 1. Commit your changes: `git commit -m "feat: Add your feature"`.
 1. Push to the branch: `git push origin feature/<your-feature>`.
 1. Open a pull request.
+
+**Note:** Please follow our commit message convention and ensure documentation is updated for new features.
 
 ## 📜 License
 

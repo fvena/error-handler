@@ -4,6 +4,9 @@ class AppError extends HandlerError {
   constructor(message) {
     super(message);
     this.name = "AppError";
+
+    // Ensures the prototype chain is correctly set to HandlerError.
+    Object.setPrototypeOf(this, AppError.prototype);
   }
 }
 
