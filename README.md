@@ -4,7 +4,7 @@
   ⭐ &nbsp;&nbsp;<strong>to the project if you like it</strong> ↗️:
 </p>
 
-<h2 align="center">Handler Error</h1>
+<h2 align="center">Handler Error</h2>
 <p align="center">Handler Error is your go-to library for creating, managing, and logging errors effortlessly, whether you're working in Node.js or the browser. It standardizes error handling by adding rich context, metadata, and clean stack trace formatting to make debugging less of a headache.</p>
 
 <br/>
@@ -13,8 +13,8 @@
 
 <!-- markdownlint-disable MD042 -->
 
-[![SemVer](https://img.shields.io/npm/v/handler-error)]()
-[![npm bundle size](https://img.shields.io/bundlephobia/min/fvena/handler-error)]()
+[![SemVer](https://img.shields.io/npm/v/handler-error)](https://www.npmjs.com/package/handler-error)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/fvena/handler-error)](https://bundlephobia.com/package/handler-error)
 [![Build Status](https://github.com/fvena/handler-error/workflows/CI%2FCD/badge.svg)]()
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 [![Live Docs](https://img.shields.io/badge/docs-online-success.svg)](https://#)
@@ -40,10 +40,33 @@
 - **Custom Error Handling**: Create errors with detailed context, descriptions, solutions, and metadata.
 - **Type Guards**: Check if an error is an instance of HandlerError using a type guard.
 
-## 🚀 Installation
+## 🚀 Getting Started
+
+### Prerequisites
+
+Ensure you have the latest version of npm installed and a supported version of Node.js:
+
+- "Node.js": >=14.0.0
+- "Browser Compatibility": Modern browsers (Chrome, Firefox, Edge, Safari)
+
+### Installation
+
+Install the library using npm:
 
 ```bash
 npm install handler-error
+```
+
+Install the library using yarn:
+
+```bash
+yarn add handler-error
+```
+
+Install the library using pnpm:
+
+```bash
+pnpm add handler-error
 ```
 
 ## 🧑‍💻 Usage
@@ -61,12 +84,21 @@ class CustomError extends HandlerError {
 }
 ```
 
-### Launch basic custom error
+### Catching and Handling errors
 
 ```typescript
-import { HandlerError } from "handler-error";
-
-throw new HandlerError("Invalid input").setErrorCode("INVALID_INPUT");
+function processRequest() {
+  try {
+    // Simulate an error
+    throw new HandlerError("Request failed").setContext("API request");
+  } catch (err) {
+    if (error instanceof AppError) {
+      err.log("detail");
+    } else {
+      console.error("Unknown error:", err);
+    }
+  }
+}
 ```
 
 ### Launch detailed custom error
@@ -82,6 +114,35 @@ throw new CustomError("Invalid email address provided.")
   )
   .setValues({ email: "user@@example.com" })
   .setExample("user@example.com");
+```
+
+### Using TypeScript with Type Annotations
+
+```typescript
+import { HandlerError } from "handler-error";
+
+class AppError extends HandlerError {
+  constructor(message: string) {
+    super(message);
+    this.name = "AppError";
+  }
+}
+
+function handleError(error: Error) {
+  if (error instanceof AppError) {
+    console.error("AppError:", error);
+  } else {
+    console.error("Unknown error:", error);
+  }
+}
+
+try {
+  throw new AppError("A critical error occurred")
+    .setContext("Database operation")
+    .setSeverity("critical");
+} catch (error) {
+  handleError(error);
+}
 ```
 
 ## 📖 API Reference
@@ -136,12 +197,11 @@ The Handler Error library provides a wide range of properties to enrich error ha
 
 #### Additional Information
 
-| Property     | Type     | Default | Description                          |
-| ------------ | -------- | ------- | ------------------------------------ |
-| `example`    | `string` |         | Example of how to resolve the error. |
-| `metadata`   | `object` |         | Additional metadata for the error.   |
-| `stackTrace` | `Array`  |         | Formatter stack trace of the error.  |
-| `values`     | `object` |         | Values associated with the error.    |
+| Property   | Type     | Default | Description                          |
+| ---------- | -------- | ------- | ------------------------------------ |
+| `example`  | `string` |         | Example of how to resolve the error. |
+| `metadata` | `object` |         | Additional metadata for the error.   |
+| `values`   | `object` |         | Values associated with the error.    |
 
 ---
 
@@ -151,43 +211,43 @@ They allow developers to enrich the error with additional information.
 
 #### Identification
 
-| Method           | Type     | Description                                       |
-| ---------------- | -------- | ------------------------------------------------- |
-| `setId()`        | `string` | Set a unique identifier for the error.            |
-| `setFile()`      | `string` | Set the file in which the error occurred.         |
-| `setLibrary()`   | `string` | Set the library or package that caused the error. |
-| `setMethod()`    | `string` | Set the method in which the error occurred.       |
-| `setTimestamp()` | `number` | Set the timestamp of when the error occurred.     |
+| Method         | Type     | Description                                       |
+| -------------- | -------- | ------------------------------------------------- |
+| `setId`        | `string` | Set a unique identifier for the error.            |
+| `setFile`      | `string` | Set the file in which the error occurred.         |
+| `setLibrary`   | `string` | Set the library or package that caused the error. |
+| `setMethod`    | `string` | Set the method in which the error occurred.       |
+| `setTimestamp` | `number` | Set the timestamp of when the error occurred.     |
 
 <br />
 
 #### Description
 
-| Method             | Type     | Description                               |
-| ------------------ | -------- | ----------------------------------------- |
-| `setContext()`     | `string` | Set the context where the error occurred. |
-| `setDescription()` | `string` | Set a detailed description of the error.  |
-| `setSolution()`    | `string` | Set a solution to resolve the error.      |
+| Method           | Type     | Description                               |
+| ---------------- | -------- | ----------------------------------------- |
+| `setContext`     | `string` | Set the context where the error occurred. |
+| `setDescription` | `string` | Set a detailed description of the error.  |
+| `setSolution`    | `string` | Set a solution to resolve the error.      |
 
 <br />
 
 #### Categorization
 
-| Method                  | Type        | Description                                                                            |
-| ----------------------- | ----------- | -------------------------------------------------------------------------------------- |
-| `setErrorCode()`        | `string`    | Set a custom error code.                                                               |
-| `setSeverity(severity)` | `Severity`  | Set a custom error code for identifying the error `critical`, `high`, `medium`, `low`. |
-| `setType(type)`         | `ErrorType` | Set the type of error `error`, `warning`.                                              |
+| Method         | Type        | Description                                                                                      |
+| -------------- | ----------- | ------------------------------------------------------------------------------------------------ |
+| `setErrorCode` | `string`    | Set a custom error code.                                                                         |
+| `setSeverity`  | `Severity`  | Set a custom error code for identifying the error. Accepts: `critical`, `high`, `medium`, `low`. |
+| `setType`      | `ErrorType` | Set the type of error. Accepts: `error`, `warning`.                                              |
 
 <br />
 
 #### Additional Information
 
-| Method          | Type     | Description                                 |
-| --------------- | -------- | ------------------------------------------- |
-| `setExample()`  | `string` | Set an example of how to resolve the error. |
-| `setMetadata()` | `object` | Set additional metadata for the error.      |
-| `setValues()`   | `object` | Set values associated with the error.       |
+| Method        | Type     | Description                                 |
+| ------------- | -------- | ------------------------------------------- |
+| `setExample`  | `string` | Set an example of how to resolve the error. |
+| `setMetadata` | `object` | Set additional metadata for the error.      |
+| `setValues`   | `object` | Set values associated with the error.       |
 
 ---
 
@@ -207,4 +267,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <br />
 
-<p align="center"> <strong>Thank you for using this library!</strong> <br /> <em>Made with ❤️ by [Your Name](https://your.link)</em> </p>
+<p align="center"> <strong>Thank you for using this library!</strong> <br /> <em>Made with ❤️ by [Francisco Vena](https://www.fvena.com)</em> </p>

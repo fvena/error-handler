@@ -31,13 +31,9 @@ function method3() {
 try {
   method1();
 } catch (error) {
-  console.error(error.name);
-  console.error(error.message);
-  console.error(error.library);
-  console.error(error.errorCode);
-  console.error(error.context);
-  console.error(error.description);
-  console.error(error.solution);
-  console.error(error.values);
-  console.error(error.example);
+  if (error instanceof AppError) {
+    console.log(error.toJSON());
+  } else {
+    console.log("It is not an instance of AppError");
+  }
 }
