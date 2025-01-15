@@ -15,3 +15,12 @@ export const SEVERITIES = ["critical", "high", "medium", "low"] as const;
  * - `'warning'`: Indicates a potential issue or something requiring attention but not immediately critical.
  */
 export const ERROR_TYPES = ["error", "warning"] as const;
+
+/**
+ * Represents the types of logs that can be generated.
+ *
+ * - `'compact'`: A compact representation of an error, suitable for centralized logging systems.
+ * - `'detail'`: Detailed information about an error.
+ * - `'simple'`: A simple representation of an error.
+ */
+export const LOG_TYPES = ["compact", "detail", "simple"] as const;
