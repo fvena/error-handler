@@ -92,7 +92,7 @@ function processRequest() {
     // Simulate an error
     throw new HandlerError("Request failed").setContext("API request");
   } catch (err) {
-    if (error instanceof AppError) {
+    if (err instanceof AppError) {
       err.log("detail");
     } else {
       console.error("Unknown error:", err);
@@ -169,7 +169,7 @@ The Handler Error library provides a wide range of properties to enrich error ha
 | `file`      | `string` | `generated` | File in which the error occurred.         |
 | `library`   | `string` |             | Library or package that caused the error. |
 | `method`    | `string` | `generated` | Method in which the error occurred.       |
-| `timestamp` | `number` | `generated` | Timestamp of when the error occurred.     |
+| `timestamp` | `Date`   | `generated` | Timestamp of when the error occurred.     |
 
 <br />
 
@@ -217,7 +217,7 @@ They allow developers to enrich the error with additional information.
 | `setFile`      | `string` | Set the file in which the error occurred.         |
 | `setLibrary`   | `string` | Set the library or package that caused the error. |
 | `setMethod`    | `string` | Set the method in which the error occurred.       |
-| `setTimestamp` | `number` | Set the timestamp of when the error occurred.     |
+| `setTimestamp` | `Date`   | Set the timestamp of when the error occurred.     |
 
 <br />
 
