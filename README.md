@@ -14,10 +14,10 @@
 <!-- markdownlint-disable MD042 -->
 
 [![SemVer](https://img.shields.io/npm/v/handler-error)](https://www.npmjs.com/package/handler-error)
-[![npm bundle size](https://img.shields.io/bundlephobia/min/fvena/handler-error)](https://bundlephobia.com/package/handler-error)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/handler-error)](https://bundlephobia.com/package/handler-error)
 [![Build Status](https://github.com/fvena/handler-error/workflows/CI%2FCD/badge.svg)](https://github.com/fvena/handler-error/actions)
 [![Status](https://img.shields.io/badge/status-active-success.svg)](https://github.com/fvena/handler-error/actions)
-[![Live Docs](https://img.shields.io/badge/docs-online-success.svg)](<[https://#](https://github.com/fvena/handler-error#readme)>)
+[![Live Docs](https://img.shields.io/badge/docs-online-success.svg)](https://github.com/fvena/handler-error#readme)
 
 <!-- markdownlint-enable MD042 -->
 
@@ -156,9 +156,11 @@ The Handler Error library provides a wide range of properties to enrich error ha
 
 - None of the properties are mandatory.
 - Some properties have default values, while others are assigned a value when the error is thrown.
-- For greater flexibility, all properties are editable except:
+- For greater flexibility, almost properties are editable except:
   - `name`, which is defined when extending the class.
   - `message`, which is defined when throwing a new error.
+  - `timestamp`, which is set when the error is thrown.
+  - `stackTrace`, which is generated when the error is thrown.
 
 > The properties are grouped into logical sections to make it easier for developers to understand their purpose and usage.
 
@@ -178,23 +180,34 @@ The Handler Error library provides a wide range of properties to enrich error ha
 
 #### Description
 
-| Property      | Type     | Default | Description                                                             |
-| ------------- | -------- | ------- | ----------------------------------------------------------------------- |
-| `context`     | `string` |         | The context where the error occurred.                                   |
-| `description` | `string` |         | Detailed description of the error.                                      |
-| `message`     | `string` |         | Message provided when the error is thrown, **not editable**.            |
-| `name`        | `string` |         | Name of the error class, defined when creating it and **not editable**. |
-| `solution`    | `string` |         | Solution to resolve the error.                                          |
+| Property   | Type     | Default | Description                                                             |
+| ---------- | -------- | ------- | ----------------------------------------------------------------------- |
+| `context`  | `string` |         | The context where the error occurred.                                   |
+| `message`  | `string` |         | Message provided when the error is thrown, **not editable**.            |
+| `name`     | `string` |         | Name of the error class, defined when creating it and **not editable**. |
+| `solution` | `string` |         | Solution to resolve the error.                                          |
 
 <br />
 
 #### Categorization
 
-| Property    | Type        | Default | Description                                                                        |
-| ----------- | ----------- | ------- | ---------------------------------------------------------------------------------- |
-| `errorCode` | `string`    |         | Custom error code.                                                                 |
-| `severity`  | `Severity`  |         | A custom error code for identifying the error `critical`, `high`, `medium`, `low`. |
-| `type`      | `ErrorType` | `error` | Type of error `error`, `warning`.                                                  |
+| Property    | Type        | Default | Description                                    |
+| ----------- | ----------- | ------- | ---------------------------------------------- |
+| `errorCode` | `string`    |         | Custom error code.                             |
+| `severity`  | `Severity`  |         | A custom error code for identifying the error. |
+| `type`      | `ErrorType` | `error` | Type of error.                                 |
+
+```typescript
+/**
+ * Represents the severity level of an error
+ */
+type Severity = "critical" | "high" | "medium" | "low";
+
+/**
+ * Represents the type of error
+ */
+type ErrorType = "error" | "warning";
+```
 
 <br />
 
@@ -214,23 +227,20 @@ They allow developers to enrich the error with additional information.
 
 #### Identification
 
-| Method         | Type     | Description                                       |
-| -------------- | -------- | ------------------------------------------------- |
-| `setId`        | `string` | Set a unique identifier for the error.            |
-| `setFile`      | `string` | Set the file in which the error occurred.         |
-| `setLibrary`   | `string` | Set the library or package that caused the error. |
-| `setMethod`    | `string` | Set the method in which the error occurred.       |
-| `setTimestamp` | `Date`   | Set the timestamp of when the error occurred.     |
+| Method       | Type     | Description                                       |
+| ------------ | -------- | ------------------------------------------------- |
+| `setFile`    | `string` | Set the file in which the error occurred.         |
+| `setLibrary` | `string` | Set the library or package that caused the error. |
+| `setMethod`  | `string` | Set the method in which the error occurred.       |
 
 <br />
 
 #### Description
 
-| Method           | Type     | Description                               |
-| ---------------- | -------- | ----------------------------------------- |
-| `setContext`     | `string` | Set the context where the error occurred. |
-| `setDescription` | `string` | Set a detailed description of the error.  |
-| `setSolution`    | `string` | Set a solution to resolve the error.      |
+| Method        | Type     | Description                               |
+| ------------- | -------- | ----------------------------------------- |
+| `setContext`  | `string` | Set the context where the error occurred. |
+| `setSolution` | `string` | Set a solution to resolve the error.      |
 
 <br />
 

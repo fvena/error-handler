@@ -43,6 +43,17 @@ const errorStack: StackFrame[] = [
 ];
 
 describe("formatStack", () => {
+  it("should handle empty stack traces", () => {
+    const formattedStack = formatStack("");
+    expect(formattedStack).toEqual([]);
+  });
+
+  it("should handle malformed stack traces", () => {
+    const malformedStack = "Error: Test\nInvalid stack line\n";
+    const formattedStack = formatStack(malformedStack);
+    expect(formattedStack).toEqual([]);
+  });
+
   it("should filter out frames from node_modules and internal modules", () => {
     const formattedStack = formatStack(errorStackMock);
 
@@ -93,10 +104,6 @@ describe("getRelativePath", () => {
     const windowsPath = `file:///${currentWorkingDirection}/src/utils/stack.ts`;
     const relativePath = getRelativePath(windowsPath);
 
-    if (process.platform === "win32") {
-      expect(relativePath).toBe("src/utils/stack.ts");
-    } else {
-      expect(relativePath).toBe("src/utils/stack.ts");
-    }
+    expect(relativePath).toBe("src/utils/stack.ts");
   });
 });
