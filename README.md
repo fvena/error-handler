@@ -95,6 +95,7 @@ function (error: Error): error is AppError {
 }
 ```
 
+
 ### Catching and Handling errors
 
 ```typescript
