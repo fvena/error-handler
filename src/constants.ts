@@ -3,10 +3,10 @@
  *
  * - `'critical'`: Indicates an issue that requires immediate attention and may cause a system failure.
  * - `'high'`: Indicates a significant issue that should be resolved promptly.
- * - `'low'`: Indicates a minor issue with minimal impact.
  * - `'medium'`: Indicates a moderate issue that has limited impact but should be addressed.
+ * - `'low'`: Indicates a minor issue with minimal impact.
  */
-export const SEVERITIES = ["critical", "high", "low", "medium"] as const;
+export const SEVERITIES = ["critical", "high", "medium", "low"] as const;
 
 /**
  * Represents the type of an error.

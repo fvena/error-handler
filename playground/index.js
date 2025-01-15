@@ -4,6 +4,9 @@ class AppError extends HandlerError {
   constructor(message) {
     super(message);
     this.name = "AppError";
+
+    // Ensures the prototype chain is correctly set to HandlerError.
+    Object.setPrototypeOf(this, AppError.prototype);
   }
 }
 
@@ -16,11 +19,10 @@ function method2() {
 }
 
 function method3() {
-  throw new AppError("Invalid email address provided.")
+  throw new AppError("Emails must include username, domain and extension.")
     .setLibrary("playground")
     .setErrorCode("INVALID_EMAIL")
     .setContext("The email entered during the registration process is invalid.")
-    .setDescription("Emails must include username, domain and extension.")
     .setSolution(
       "1. Verify the email address entered.\n2. Correct the email address entered.\n3. Try again.",
     )

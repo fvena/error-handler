@@ -6,6 +6,7 @@ const config: Options = {
   dts: true,
   entryPoints: ["src/index.ts"],
   format: ["cjs", "esm"],
+  minify: true,
   outDir: "dist",
 };
 

@@ -7,14 +7,14 @@ export function validateErrorType(type: ErrorType): void {
   }
 }
 
-export function validateSeverity(severity: Severity): void {
-  if (!SEVERITIES.includes(severity)) {
-    throw new Error(`Invalid severity: "${severity}". Must be one of: ${SEVERITIES.join(", ")}`);
+export function validateObject(object: Record<string, unknown>): void {
+  if (typeof object !== "object") {
+    throw new TypeError(`Invalid object: "${String(object)}" must be an object.`);
   }
 }
 
-export function validateTimestamp(timestamp: Date): void {
-  if (!(timestamp instanceof Date)) {
-    throw new TypeError(`Invalid timestamp: "${String(timestamp)}". Must be a Date object`);
+export function validateSeverity(severity: Severity): void {
+  if (!SEVERITIES.includes(severity)) {
+    throw new Error(`Invalid severity: "${severity}". Must be one of: ${SEVERITIES.join(", ")}`);
   }
 }

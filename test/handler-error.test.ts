@@ -14,11 +14,22 @@ describe("HandlerError", () => {
     expect(error1.id).not.toBe(error2.id);
   });
 
-  it("should allow setting context and metadata", () => {
+  it("should allow setting context", () => {
     const error = new HandlerError("Test error");
-    error.setContext("TestContext").setMetadata({ key: "value" });
-
+    error.setContext("TestContext");
     expect(error.context).toBe("TestContext");
+  });
+
+  it("should allow setting metadata", () => {
+    const error = new HandlerError("Test error");
+    error.setMetadata({ key: "value" });
     expect(error.metadata).toEqual({ key: "value" });
+  });
+
+  it("should handle invalid metadata", () => {
+    const error = new HandlerError("Test error");
+
+    // @ts-expect-error -- Testing invalid metadata
+    expect(() => error.setMetadata("invalid metadata")).toThrow();
   });
 });

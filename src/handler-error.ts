@@ -1,21 +1,21 @@
-import type { ErrorType, Severity } from "./types";
+import type { ErrorType, Severity, StackFrame } from "./types";
 import crypto from "node:crypto";
-import { validateErrorType, validateSeverity, validateTimestamp } from "./utils/validations";
+import { formatStack } from "./utils/stack";
+import { validateErrorType, validateObject, validateSeverity } from "./utils/validations";
 
 /**
  * Represents a customizable error with detailed context, metadata, and stack trace.
  */
 export class HandlerError extends Error {
   // Identification properties
-  private _id: string; // Unique identifier for the error.
+  private readonly _id: string; // Unique identifier for the error.
+  private readonly _timestamp: Date; // Timestamp of when the error occurred.
   private _file?: string; // File in which the error occurred.
   private _library?: string; // Library or package that caused the error.
   private _method?: string; // Method in which the error occurred.
-  private _timestamp: Date; // Timestamp of when the error occurred.
 
   // Description properties
   private _context?: string; // Context in which the error occurred.
-  private _description?: string; // Detailed description of the error.
   private _solution?: string; // Solution to resolve the error.
 
   // Categorization properties
@@ -26,6 +26,7 @@ export class HandlerError extends Error {
   // Additional properties
   private _example?: string; // Example of how to resolve the error.
   private _metadata: Record<string, unknown> = {}; // Additional metadata for the error.
+  private _stackTrace: StackFrame[] = []; // Stack trace of the error.
   private _values: Record<string, unknown> = {}; // Values associated with the error.
 
   /**
@@ -39,19 +40,18 @@ export class HandlerError extends Error {
     this._id = crypto.randomUUID();
     this.name = this.constructor.name;
     this._timestamp = new Date();
-    this._description = message;
 
-    Object.setPrototypeOf(this, HandlerError.prototype);
+    if (this.stack) {
+      this._stackTrace = formatStack(this.stack);
+      this._method = this._stackTrace[0]?.method ?? undefined;
+      this._file = this._stackTrace[0]?.file ?? undefined;
+    }
   }
 
   /* Getters */
 
   get context() {
     return this._context;
-  }
-
-  get description() {
-    return this._description;
   }
 
   get errorCode() {
@@ -90,6 +90,10 @@ export class HandlerError extends Error {
     return this._solution;
   }
 
+  get stackTrace() {
+    return this._stackTrace;
+  }
+
   get timestamp() {
     return this._timestamp;
   }
@@ -109,11 +113,6 @@ export class HandlerError extends Error {
     return this;
   }
 
-  public setDescription(description: string) {
-    this._description = description;
-    return this;
-  }
-
   public setErrorCode(errorCode: string) {
     this._errorCode = errorCode;
     return this;
@@ -129,17 +128,13 @@ export class HandlerError extends Error {
     return this;
   }
 
-  public setId(id: string) {
-    this._id = id;
-    return this;
-  }
-
   public setLibrary(library: string) {
     this._library = library;
     return this;
   }
 
   public setMetadata(metadata: Record<string, unknown>) {
+    validateObject(metadata);
     this._metadata = metadata;
     return this;
   }
@@ -160,12 +155,6 @@ export class HandlerError extends Error {
     return this;
   }
 
-  public setTimestamp(timestamp: Date) {
-    validateTimestamp(timestamp);
-    this._timestamp = timestamp;
-    return this;
-  }
-
   public setType(type: ErrorType) {
     validateErrorType(type);
     this._type = type;
@@ -173,6 +162,7 @@ export class HandlerError extends Error {
   }
 
   public setValues(values: Record<string, unknown>) {
+    validateObject(values);
     this._values = values;
     return this;
   }
@@ -181,7 +171,6 @@ export class HandlerError extends Error {
   public toJSON() {
     return {
       context: this._context,
-      description: this._description,
       errorCode: this._errorCode,
       example: this._example,
       file: this._file,
@@ -193,8 +182,8 @@ export class HandlerError extends Error {
       name: this.name,
       severity: this._severity,
       solution: this._solution,
-      stack: this.stack,
-      timestamp: this._timestamp,
+      stackTrace: this._stackTrace,
+      timestamp: this._timestamp.toISOString(),
       type: this._type,
       values: this._values,
     };
