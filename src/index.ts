@@ -1,1 +1,1 @@
-export * from "./guards/is-handler-error";
+export * from "./handler-error";
