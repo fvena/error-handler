@@ -56,17 +56,25 @@ export function logDetail(data: HandlerErrorProperties) {
   // Log values
   console.log(chalk.bold(`\nDescription:`));
   console.log(chalk.gray(`${data.context ?? ""} ${data.message}`));
-  console.log(chalk.gray(JSON.stringify(data.values)));
+  if (data.values) {
+    console.log(chalk.gray(JSON.stringify(data.values)));
+  }
 
   // Log solution
-  console.log(chalk.bold(`\nSolution:`));
-  console.log(chalk.gray(data.solution));
+  if (data.solution) {
+    console.log(chalk.bold(`\nSolution:`));
+    console.log(chalk.gray(data.solution));
+  }
 
   // Log example
-  console.log(chalk.bold(`\nExample:`));
-  console.log(chalk.gray(data.example));
+  if (data.example) {
+    console.log(chalk.bold(`\nExample:`));
+    console.log(chalk.gray(data.example));
+  }
 
   // Log stack trace
+  if (data.stackTrace.length === 0) return;
+
   console.log(chalk.bold(`\nStack Trace:`));
   const formattedStack = data.stackTrace
     .map((trace) => {
@@ -76,6 +84,7 @@ export function logDetail(data: HandlerErrorProperties) {
       return `${prefix} ${method} ${location}`;
     })
     .join("\n");
+
   console.log(formattedStack);
 }
 
@@ -87,12 +96,25 @@ export function logDetail(data: HandlerErrorProperties) {
 export function logSimple(data: HandlerErrorProperties): void {
   const logError = [];
 
-  if (data.library) logError.push(chalk.yellow(`[${data.library}]`));
+  if (data.library) {
+    logError.push(chalk.yellow(`[${data.library}]`));
+  }
+
   logError.push(formatErrorType(data.type));
-  if (data.context) logError.push(data.context);
+
+  if (data.context) {
+    logError.push(data.context);
+  }
+
   logError.push(data.message);
-  if (data.solution) logError.push(data.solution);
-  if (data.values) logError.push(`\nReceived value: ${chalk.gray(JSON.stringify(data.values))}`);
+
+  if (data.solution) {
+    logError.push(data.solution);
+  }
+
+  if (data.values) {
+    logError.push(`\nReceived value: ${chalk.gray(JSON.stringify(data.values))}`);
+  }
 
   console.log(logError.join(" "));
 }
