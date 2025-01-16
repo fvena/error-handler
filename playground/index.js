@@ -34,7 +34,11 @@ try {
   method1();
 } catch (error) {
   if (error instanceof AppError) {
-    console.log(error.toJSON());
+    error.log();
+    console.log("");
+    error.log("detail");
+    console.log("");
+    error.log("compact");
   } else {
     console.log("It is not an instance of AppError");
   }

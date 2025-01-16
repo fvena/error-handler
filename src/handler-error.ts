@@ -1,7 +1,8 @@
-import type { ErrorType, Severity, StackFrame } from "./types";
+import type { ErrorType, LogType, Severity, StackFrame } from "./types";
 import crypto from "node:crypto";
 import { formatStack } from "./utils/stack";
 import { validateErrorType, validateObject, validateSeverity } from "./utils/validations";
+import { logCompact, logDetail, logSimple } from "./utils/logs";
 
 /**
  * Represents a customizable error with detailed context, metadata, and stack trace.
@@ -20,14 +21,14 @@ export class HandlerError extends Error {
 
   // Categorization properties
   private _errorCode?: string; // Error code for the error.
-  private _severity: Severity = "medium"; // Severity of the error.
+  private _severity?: Severity; // Severity of the error.
   private _type: ErrorType = "error"; // Type of error.
 
   // Additional properties
   private _example?: string; // Example of how to resolve the error.
-  private _metadata: Record<string, unknown> = {}; // Additional metadata for the error.
+  private _metadata?: Record<string, unknown>; // Additional metadata for the error.
   private _stackTrace: StackFrame[] = []; // Stack trace of the error.
-  private _values: Record<string, unknown> = {}; // Values associated with the error.
+  private _values?: Record<string, unknown>; // Values associated with the error.
 
   /**
    * Creates a new `HandlerError` instance.
@@ -187,5 +188,25 @@ export class HandlerError extends Error {
       type: this._type,
       values: this._values,
     };
+  }
+
+  public log(type: LogType = "simple") {
+    switch (type) {
+      case "compact": {
+        logCompact(this);
+        return;
+      }
+      case "detail": {
+        logDetail(this);
+        return;
+      }
+      case "simple": {
+        logSimple(this);
+        return;
+      }
+      default: {
+        throw new Error(`Invalid log type: ${String(type)}`);
+      }
+    }
   }
 }

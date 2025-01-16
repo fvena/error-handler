@@ -46,7 +46,7 @@
 
 Ensure you have the latest version of npm installed and a supported version of Node.js:
 
-- "Node.js": >=22.0.0
+- "Node.js": >=18.0.0
 - "Browser Compatibility": Modern browsers (Chrome, Firefox, Edge, Safari)
 
 ### Installation
@@ -90,11 +90,10 @@ class AppError extends HandlerError {
 ### Type Guard
 
 ```typescript
-function (error: Error): error is AppError {
+function isAppError(error: Error): error is AppError {
   return error instanceof AppError;
 }
 ```
-
 
 ### Catching and Handling errors
 
@@ -104,7 +103,7 @@ function processRequest() {
     // Simulate an error
     throw new AppError("Request failed").setContext("API request");
   } catch (err) {
-    if isAppError(err) {
+    if (isAppError(err)) {
       err.log("detail");
     } else {
       console.error("Unknown error:", err);
@@ -132,7 +131,7 @@ throw new AppError("Invalid email address provided.")
 
 ```typescript
 function handleError(error: Error) {
-  if isAppError(err) {
+  if (isAppError(err)) {
     console.error("AppError:", error);
   } else {
     console.error("Unknown error:", error);
@@ -263,6 +262,40 @@ They allow developers to enrich the error with additional information.
 | `setValues`   | `object` | Set values associated with the error.       |
 
 ---
+
+### Utility Methods
+
+Utility methods provide additional functionality for working with errors.
+
+| Method   | Type      | Default  | Description                                 |
+| -------- | --------- | -------- | ------------------------------------------- |
+| `log`    | `LogType` | `simple` | Write the error information to the console. |
+| `toJSON` |           |          | Serialize the error information.            |
+
+#### Log Types
+
+The `log` method accepts a log type to determine the level of detail in the output. The following log types are available:
+
+- `simple`: Basic error information including message and stack trace
+- `compact`: Minimal output with just the essential error details
+- `detail`: Comprehensive output including all error properties
+
+```typescript
+type LogType = "compact" | "detail" | "simple";
+```
+
+#### Example Usage
+
+```typescript
+// Logging with different formats
+error.log(); // Uses default 'simple' format
+error.log("compact");
+error.log("detail");
+
+// Converting to JSON
+const errorJson = error.toJSON();
+console.log(JSON.stringify(errorJson, null, 2));
+```
 
 ## 🤝 Contributions
 
