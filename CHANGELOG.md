@@ -1,3 +1,12 @@
+# [1.1.0](https://github.com/fvena/handler-error/compare/v1.0.0...v1.1.0) (2025-01-16)
+
+
+### Features
+
+* add logging utility methods ([c1466f4](https://github.com/fvena/handler-error/commit/c1466f495cdd68772488164106832ec5c5b9c317))
+* enhance logging functions to conditionally display values, solutions, and examples ([b676517](https://github.com/fvena/handler-error/commit/b676517e93908449dbb4256cfb36469b95057fae))
+* improve error logging format and enhance log detail output ([89f61f0](https://github.com/fvena/handler-error/commit/89f61f0e3c3b963618a3f16a4adb3cb568b5ade2))
+
 # 1.0.0 (2025-01-15)
 
 ### Features
