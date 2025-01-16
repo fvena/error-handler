@@ -15,7 +15,9 @@ export function formatErrorType(type: ErrorType, severity?: Severity): string {
     warning: chalk.yellow(`${severityString}Warning:`),
   };
 
-  return typeMap[type];
+  return Object.prototype.hasOwnProperty.call(typeMap, type)
+    ? typeMap[type]
+    : chalk.red(`${severityString}Unknown Error:`);
 }
 
 /**

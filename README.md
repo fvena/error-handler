@@ -267,16 +267,34 @@ They allow developers to enrich the error with additional information.
 
 Utility methods provide additional functionality for working with errors.
 
-| Method   | Type      | Default  | Description                                |
-| -------- | --------- | -------- | ------------------------------------------ |
-| `log`    | `LogType` | `simple` | Log the error with additional information. |
-| `toJSON` |           |          | Serialize the error information.           |
+| Method   | Type      | Default  | Description                                 |
+| -------- | --------- | -------- | ------------------------------------------- |
+| `log`    | `LogType` | `simple` | Write the error information to the console. |
+| `toJSON` |           |          | Serialize the error information.            |
+
+#### Log Types
+
+The `log` method accepts a log type to determine the level of detail in the output. The following log types are available:
+
+- `simple`: Basic error information including message and stack trace
+- `compact`: Minimal output with just the essential error details
+- `detail`: Comprehensive output including all error properties
 
 ```typescript
-/**
- * Represents the type of log to output
- */
 type LogType = "compact" | "detail" | "simple";
+```
+
+#### Example Usage
+
+```typescript
+// Logging with different formats
+error.log(); // Uses default 'simple' format
+error.log("compact");
+error.log("detail");
+
+// Converting to JSON
+const errorJson = error.toJSON();
+console.log(JSON.stringify(errorJson, null, 2));
 ```
 
 ## 🤝 Contributions

@@ -14,8 +14,11 @@ export interface StackFrame {
 }
 
 type ClassProperties<C> = {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type -- This is a valid type
-  [Key in keyof C as C[Key] extends Function ? never : Key]: C extends Record<Key, C[Key]>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any is required here
+  [Key in keyof C as C[Key] extends (...arguments_: any[]) => any ? never : Key]: C extends Record<
+    Key,
+    C[Key]
+  >
     ? C[Key]
     : C[Key] | undefined;
 };
