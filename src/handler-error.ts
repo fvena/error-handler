@@ -1,8 +1,9 @@
-import type { ErrorType, LogType, Severity, StackFrame } from "./types";
+import type { EnvironmentInfo, ErrorType, LogType, Severity, StackFrame } from "./types";
 import crypto from "node:crypto";
 import { formatStack } from "./utils/stack";
 import { validateErrorType, validateObject, validateSeverity } from "./utils/validations";
 import { logCompact, logDetail, logSimple } from "./utils/logs";
+import { getEnvironmentInfo } from "./utils/enviroment";
 
 /**
  * Represents a customizable error with detailed context, metadata, and stack trace.
@@ -29,6 +30,7 @@ export class HandlerError extends Error {
   private _metadata?: Record<string, unknown>; // Additional metadata for the error.
   private _stackTrace: StackFrame[] = []; // Stack trace of the error.
   private _values?: Record<string, unknown>; // Values associated with the error.
+  private _environmentInfo?: EnvironmentInfo;
 
   /**
    * Creates a new `HandlerError` instance.
@@ -53,6 +55,10 @@ export class HandlerError extends Error {
 
   get context() {
     return this._context;
+  }
+
+  get environmentInfo() {
+    return this._environmentInfo;
   }
 
   get errorCode() {
@@ -172,6 +178,7 @@ export class HandlerError extends Error {
   public toJSON() {
     return {
       context: this._context,
+      environmentInfo: this._environmentInfo,
       errorCode: this._errorCode,
       example: this._example,
       file: this._file,
@@ -207,6 +214,14 @@ export class HandlerError extends Error {
       default: {
         throw new Error(`Invalid log type: ${String(type)}`);
       }
+    }
+  }
+
+  protected fetchEnvironmentInfo() {
+    try {
+      this._environmentInfo = getEnvironmentInfo();
+    } catch {
+      this._environmentInfo = { environment: "unknown" };
     }
   }
 }

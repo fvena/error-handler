@@ -5,7 +5,7 @@
 </p>
 
 <h2 align="center">Handler Error</h2>
-<p align="center">Handler Error is your go-to library for creating, managing, and logging errors effortlessly, whether you're working in Node.js or the browser. It standardizes error handling by adding rich context, metadata, and clean stack trace formatting to make debugging less of a headache.</p>
+<p align="center">Simplify error management with context-rich, standardized debugging for Node.js and browsers.</p>
 
 <br/>
 
@@ -35,10 +35,24 @@
 
 <br />
 
+<details>
+  <summary><strong>Table of Contents</strong></summary>
+  <ol>
+    <li><a href="#-features">Features</a></li>
+    <li><a href="#-getting-started">Getting Started</a></li>
+    <li><a href="#-usage">Usage</a></li>
+    <li><a href="#-api-reference">API Reference</a></li>
+    <li><a href="#-contributions">Contributions</a></li>
+    <li><a href="#-license">License</a></li>
+  </ol>
+</details>
+
 ## ✨ Features
 
 - **Custom Error Handling**: Create errors with detailed context, descriptions, solutions, and metadata.
-- **Type Guards**: Check if an error is an instance of HandlerError using a type guard.
+- **Environment Info**: Retrieve detailed runtime environment information, including browser and server contexts.
+- **Error Logging**: Use default predefined templates to display error information in the console or terminal.
+- **JSON Serialization**: Convert error information into a structured JSON format, enabling seamless integration with APIs, logging systems, or storage solutions.
 
 ## 🚀 Getting Started
 
@@ -46,32 +60,25 @@
 
 Ensure you have the latest version of npm installed and a supported version of Node.js:
 
-- "Node.js": >=18.0.0
-- "Browser Compatibility": Modern browsers (Chrome, Firefox, Edge, Safari)
+- **Node.js**: >=18.0.0
+- **Browser Compatibility**: Modern browsers (Chrome, Firefox, Edge, Safari)
 
 ### Installation
 
-Install the library using npm:
-
 ```bash
+# Install with npm:
 npm install handler-error
-```
 
-Install the library using yarn:
-
-```bash
+# Install with yarn:
 yarn add handler-error
-```
 
-Install the library using pnpm:
-
-```bash
+# Install with pnpm:
 pnpm add handler-error
 ```
 
 ## 🧑‍💻 Usage
 
-### Create custom errors class
+### Creating a custom errors class
 
 ```typescript
 import { HandlerError } from "handler-error";
@@ -80,14 +87,11 @@ class AppError extends HandlerError {
   constructor(message) {
     super(message);
     this.name = "AppError";
-
-    // Ensures the prototype chain is correctly set to HandlerError.
-    Object.setPrototypeOf(this, AppError.prototype);
   }
 }
 ```
 
-### Type Guard
+### Using type guards
 
 ```typescript
 function isAppError(error: Error): error is AppError {
@@ -112,6 +116,26 @@ function processRequest() {
 }
 ```
 
+### Handling errors with a custom handler
+
+```typescript
+function handleError(error: Error) {
+  if (error instanceof AppError) {
+    console.error("AppError:", error);
+  } else {
+    console.error("Unknown error:", error);
+  }
+}
+
+try {
+  throw new AppError("A critical error occurred")
+    .setContext("Database operation")
+    .setSeverity("critical");
+} catch (error) {
+  handleError(error);
+}
+```
+
 ### Launch detailed custom error
 
 ```typescript
@@ -127,23 +151,93 @@ throw new AppError("Invalid email address provided.")
   .setExample("user@example.com");
 ```
 
-### Handling errors with a custom handler
+### Fetching environment information
+
+Handler Error provides a fetchEnvironmentInfo method for capturing runtime details:
 
 ```typescript
-function handleError(error: Error) {
-  if (isAppError(err)) {
-    console.error("AppError:", error);
-  } else {
-    console.error("Unknown error:", error);
+import { HandlerError } from "handler-error";
+
+class AppError extends HandlerError {
+  constructor(message) {
+    super(message);
+    this.name = "AppError";
+    this.fetchEnvironmentInfo(); // Enables detailed environment logging
   }
 }
 
-try {
-  throw new AppError("A critical error occurred")
-    .setContext("Database operation")
-    .setSeverity("critical");
-} catch (error) {
-  handleError(error);
+const error = new AppError("An error occurred");
+console.log(error.environmentInfo);
+```
+
+#### Example output in a browser environment
+
+```json
+{
+  "environment": "browser",
+  "browserInfo": {
+    "cookiesEnabled": true,
+    "language": "en-US",
+    "platform": "Windows NT 10.0",
+    "screenResolution": {
+      "height": 1080,
+      "width": 1920
+    },
+    "url": "http://localhost:3000",
+    "userAgent": "Mozilla/5.0 ..."
+  }
+}
+```
+
+#### Example output in a Node.js environment
+
+```json
+{
+  "environment": "node",
+  "serverInfo": {
+    "cpuArch": "x64",
+    "hostname": "server-01",
+    "nodeVersion": "v18.15.0",
+    "osRelease": "10.0.19042",
+    "osType": "Windows_NT",
+    "platform": "win32",
+    "systemUptime": 3600 // seconds
+  },
+  "isProduction": false
+}
+```
+
+### Sending errors to a logging service
+
+You can extend the `HandlerError` class to integrate error reporting tools like [Sentry](https://sentry.io).
+
+```typescript
+import { HandlerError } from "handler-error";
+
+class AppError extends HandlerError {
+  constructor(message) {
+    super(message);
+    this.name = "AppError";
+    this.logToService(); // Send error to logging service when created
+  }
+
+  private logToService() {
+    // Format error data
+    const logData = {
+      id: this.id,
+      message: this.message,
+      context: this.context,
+      severity: this.severity,
+      type: this.type,
+      errorCode: this.errorCode,
+      metadata: this.metadata,
+      values: this.values,
+      environmentInfo: this.environmentInfo,
+    };
+
+    // Send error to logging service
+    console.log("Sending error to logging service:", logData);
+  }
 }
 ```
 
@@ -212,11 +306,42 @@ type ErrorType = "error" | "warning";
 
 #### Additional Information
 
-| Property   | Type     | Default | Description                          |
-| ---------- | -------- | ------- | ------------------------------------ |
-| `example`  | `string` |         | Example of how to resolve the error. |
-| `metadata` | `object` |         | Additional metadata for the error.   |
-| `values`   | `object` |         | Values associated with the error.    |
+| Property          | Type              | Default | Description                            |
+| ----------------- | ----------------- | ------- | -------------------------------------- |
+| `example`         | `string`          |         | Example of how to resolve the error.   |
+| `metadata`        | `object`          |         | Additional metadata for the error.     |
+| `values`          | `object`          |         | Values associated with the error.      |
+| `environmentInfo` | `EnvironmentInfo` |         | Environment information for the error. |
+
+```typescript
+/**
+ * Represents the environment information for the error
+ */
+interface EnvironmentInfo {
+  environment: "browser" | "node" | "unknown";
+  browserInfo?: {
+    cookiesEnabled: boolean; // Indicates if cookies are enabled
+    language: string; // Language of the browser
+    platform: string; // Platform of the browser
+    screenResolution?: {
+      height: number; // Height of the screen
+      width: number; // Width of the screen
+    };
+    url: string; // URL of the page
+    userAgent: string; // User agent string
+  };
+  serverInfo?: {
+    cpuArch: string; // CPU Architecture x64, x86
+    hostname: string; // Hostname of the server
+    nodeVersion: string; // Node.js version
+    osRelease: string; // OS release version
+    osType: string; // OS type (e.g., Windows_NT)
+    platform: string; // Platform (e.g., win32)
+    systemUptime: number; // System uptime in seconds
+  };
+  isProduction: boolean; // Indicates if the environment is production
+}
+```
 
 ---
 
@@ -299,7 +424,7 @@ console.log(JSON.stringify(errorJson, null, 2));
 
 ## 🤝 Contributions
 
-We welcome contributions! Here's how you can get involved:
+I love collaboration! Here's how you can help improve Handler Error.
 
 1. Fork the repository.
 1. Create a feature branch: `git checkout -b feature/<your-feature>`.
@@ -315,8 +440,11 @@ We welcome contributions! Here's how you can get involved:
 
 ## 📜 License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
 
 <br />
 
-<p align="center"> <strong>Thank you for using this library!</strong> <br /> <em>Made with ❤️ by [Francisco Vena](https://www.fvena.com)</em> </p>
+<p align="center">
+  <strong>Thank you for using this library!</strong><br />
+  <em>Developed with care by <a href="https://www.fvena.com">Francisco Vena</a></em>
+</p>

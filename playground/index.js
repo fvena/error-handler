@@ -4,9 +4,7 @@ class AppError extends HandlerError {
   constructor(message) {
     super(message);
     this.name = "AppError";
-
-    // Ensures the prototype chain is correctly set to HandlerError.
-    Object.setPrototypeOf(this, AppError.prototype);
+    this.fetchEnvironmentInfo();
   }
 }
 
@@ -39,6 +37,9 @@ try {
     error.log("detail");
     console.log("");
     error.log("compact");
+    console.log("");
+    // eslint-disable-next-line unicorn/no-null -- It is a test
+    console.log(JSON.stringify(error.environmentInfo, null, 2));
   } else {
     console.log("It is not an instance of AppError");
   }
