@@ -1,11 +1,45 @@
 import type { HandlerError } from "./handler-error";
 import { ERROR_TYPES, LOG_TYPES, SEVERITIES } from "./constants";
 
-export type ErrorType = (typeof ERROR_TYPES)[number];
+export interface BrowserInfo {
+  cookiesEnabled: boolean;
+  language: string;
+  platform: string;
+  screenResolution: {
+    height: number;
+    width: number;
+  };
+  url: string;
+  userAgent: string;
+}
+export type Environment = "browser" | "node" | "unknown";
 
+export interface EnvironmentInfo {
+  browserInfo?: BrowserInfo;
+  environment: Environment;
+  isProduction?: boolean;
+  serverInfo?: ServerInfo;
+}
+export type ErrorType = (typeof ERROR_TYPES)[number];
+export interface HandlerErrorOptions {
+  getEnvironmentInfo?: boolean;
+}
 export type HandlerErrorProperties = ClassProperties<HandlerError>;
+
 export type LogType = (typeof LOG_TYPES)[number];
+
+export interface ServerInfo {
+  cpuArch: string;
+  hostname: string;
+  nodeVersion: string;
+  osRelease: string;
+  osType: string;
+  platform: string;
+  systemUptime: number;
+}
+
 export type Severity = (typeof SEVERITIES)[number];
+
 export interface StackFrame {
   col?: number;
   file?: string;
