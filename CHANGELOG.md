@@ -2,11 +2,11 @@
 
 ### Features
 
-- add logging utility methods ([c1466f4](https://github.com/fvena/handler-error/commit/c1466f495cdd68772488164106832ec5c5b9c317))
+* add logging utility methods ([c1466f4](https://github.com/fvena/handler-error/commit/c1466f495cdd68772488164106832ec5c5b9c317))
 
 # 1.0.0 (2025-01-15)
 
 ### Features
 
-- add stack trace formatting utility and enhance HandlerError with stack trace support ([02a1d8c](https://github.com/fvena/handler-error/commit/02a1d8c9684d3e513848188a8567cd2a34bd51a5))
-- implement HandlerError class with customizable properties and methods ([1708002](https://github.com/fvena/handler-error/commit/170800207febcc6a1b66d6f8f0ca18b74946dad4))
+* add stack trace formatting utility and enhance HandlerError with stack trace support ([02a1d8c](https://github.com/fvena/handler-error/commit/02a1d8c9684d3e513848188a8567cd2a34bd51a5))
+* implement HandlerError class with customizable properties and methods ([1708002](https://github.com/fvena/handler-error/commit/170800207febcc6a1b66d6f8f0ca18b74946dad4))
