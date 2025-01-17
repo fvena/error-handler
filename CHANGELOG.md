@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/fvena/handler-error/compare/v1.1.0...v1.2.0) (2025-01-17)
+
+
+### Bug Fixes
+
+* enhance environment information handling and improve error context ([26a6296](https://github.com/fvena/handler-error/commit/26a6296e1908353fb98d82de09b0352a296552a7))
+* update types to improve optional fields ([ccce364](https://github.com/fvena/handler-error/commit/ccce364eb85e219f4f82c73ffbded67bdff5d914))
+
+
+### Features
+
+* enhance error handling with environment information retrieval ([028141f](https://github.com/fvena/handler-error/commit/028141f464a126c729237fcace34aa66314bdfce))
+
 # [1.1.0](https://github.com/fvena/handler-error/compare/v1.0.0...v1.1.0) (2025-01-16)
 
 ### Features
