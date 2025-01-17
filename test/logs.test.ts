@@ -6,6 +6,7 @@ import { formatErrorType, logCompact, logDetail, logSimple } from "../src/utils/
 const timestamp = new Date();
 const mockErrorData: HandlerErrorProperties = {
   context: undefined,
+  environmentInfo: undefined,
   errorCode: undefined,
   example: undefined,
   file: undefined,

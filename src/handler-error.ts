@@ -178,6 +178,7 @@ export class HandlerError extends Error {
   public toJSON() {
     return {
       context: this._context,
+      environmentInfo: this._environmentInfo,
       errorCode: this._errorCode,
       example: this._example,
       file: this._file,
@@ -217,6 +218,10 @@ export class HandlerError extends Error {
   }
 
   protected fetchEnvironmentInfo() {
-    this._environmentInfo = getEnvironmentInfo();
+    try {
+      this._environmentInfo = getEnvironmentInfo();
+    } catch {
+      this._environmentInfo = { environment: "unknown" };
+    }
   }
 }

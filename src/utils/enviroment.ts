@@ -46,13 +46,17 @@ export function getRuntimeEnvironment(): Environment {
 export function getServerInfo(): ServerInfo | undefined {
   if (typeof process === "undefined" || !process.versions.node) return undefined;
 
-  return {
-    cpuArch: os.arch(),
-    hostname: os.hostname(),
-    nodeVersion: process.version,
-    osRelease: os.release(),
-    osType: os.type(),
-    platform: os.platform(),
-    systemUptime: os.uptime(),
-  };
+  try {
+    return {
+      cpuArch: os.arch(),
+      hostname: os.hostname(),
+      nodeVersion: process.version,
+      osRelease: os.release(),
+      osType: os.type(),
+      platform: os.platform(),
+      systemUptime: os.uptime(),
+    };
+  } catch {
+    return undefined;
+  }
 }

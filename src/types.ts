@@ -5,7 +5,7 @@ export interface BrowserInfo {
   cookiesEnabled: boolean;
   language: string;
   platform: string;
-  screenResolution: {
+  screenResolution?: {
     height: number;
     width: number;
   };

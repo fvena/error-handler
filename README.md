@@ -201,7 +201,7 @@ console.log(error.environmentInfo);
     "osRelease": "10.0.19042",
     "osType": "Windows_NT",
     "platform": "win32",
-    "systemUptime": 3600
+    "systemUptime": 3600 // seconds
   },
   "isProduction": false
 }
@@ -323,7 +323,7 @@ interface EnvironmentInfo {
     cookiesEnabled: boolean; // Indicates if cookies are enabled
     language: string; // Language of the browser
     platform: string; // Platform of the browser
-    screenResolution: {
+    screenResolution?: {
       height: number; // Height of the screen
       width: number; // Width of the screen
     };
@@ -440,7 +440,7 @@ I love collaboration! Here's how you can help improve Handler Error.
 
 ## 📜 License
 
-Distributed under the MIT License. See [LICENSE]() for more information.
+Distributed under the MIT License. See [LICENSE](./LICENSE) for more information.
 
 <br />
 
