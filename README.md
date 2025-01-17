@@ -178,13 +178,13 @@ console.log(error.environmentInfo);
   "browserInfo": {
     "cookiesEnabled": true,
     "language": "en-US",
-    "platform": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
+    "platform": "Windows NT 10.0",
     "screenResolution": {
       "height": 1080,
       "width": 1920
     },
     "url": "http://localhost:3000",
-    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
+    "userAgent": "Mozilla/5.0 ..."
   }
 }
 ```

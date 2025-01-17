@@ -30,10 +30,10 @@ export type LogType = (typeof LOG_TYPES)[number];
 
 export interface ServerInfo {
   cpuArch: string;
-  hostname: string;
+  hostname?: string;
   nodeVersion: string;
-  osRelease: string;
-  osType: string;
+  osRelease?: string;
+  osType?: string;
   platform: string;
   systemUptime: number;
 }
