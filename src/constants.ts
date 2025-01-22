@@ -2,19 +2,18 @@
  * Represents the severity levels for an error.
  *
  * - `'critical'`: Indicates an issue that requires immediate attention and may cause a system failure.
- * - `'high'`: Indicates a significant issue that should be resolved promptly.
- * - `'medium'`: Indicates a moderate issue that has limited impact but should be addressed.
- * - `'low'`: Indicates a minor issue with minimal impact.
+ * - `'error'`: Indicates an issue that requires attention but does not necessarily require immediate action.
+ * - `'warning'`: Indicates an issue that should be addressed but does not require immediate attention.
+ * - `'debug'`: Indicates an issue that is useful for debugging but does not require immediate attention.
+ * - `'info'`: Indicates an informational message.
  */
-export const SEVERITIES = ["critical", "high", "medium", "low"] as const;
-
-/**
- * Represents the type of an error.
- *
- * - `'error'`: Indicates a critical or blocking issue.
- * - `'warning'`: Indicates a potential issue or something requiring attention but not immediately critical.
- */
-export const ERROR_TYPES = ["error", "warning"] as const;
+export const ErrorSeverity = {
+  CRITICAL: "critical",
+  DEBUG: "debug",
+  ERROR: "error",
+  INFO: "info",
+  WARNING: "warning",
+} as const;
 
 /**
  * Represents the types of logs that can be generated.
