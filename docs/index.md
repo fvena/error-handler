@@ -45,9 +45,9 @@ Imagine this: instead of cryptic error messages like `TypeError: Cannot read pro
 
 ### What’s Next?
 
-1. **Docs**: Learn how to install, use, and troubleshoot Handler Error effectively.
-2. **API**: Discover the full range of capabilities through detailed documentation of methods, properties, and types.
-3. **Guides**: Follow best practices and advanced tips to enhance your error handling workflows.
+1. **[Docs](/docs/getting-started)**: Learn how to install, use, and troubleshoot Handler Error effectively.
+2. **[API](/api/overview)**: Discover the full range of capabilities through detailed documentation of methods, properties, and types.
+3. **[Guides](/guides/best-practices)**: Follow best practices and advanced tips to enhance your error handling workflows.
 4. **Examples**: Explore practical use cases for Node.js, browser environments, and more.
 
 > "Handler Error is more than just a library; it’s your companion in writing resilient and maintainable applications."

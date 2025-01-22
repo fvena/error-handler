@@ -3,6 +3,7 @@ import { ErrorSeverity } from "./constants";
 /**
  * Represents the options for creating a new error.
  *
+ * cause: The cause of the error.
  * code: Error code for the error.
  * message: The error message.
  * metadata: Additional metadata for the error.
@@ -10,14 +11,38 @@ import { ErrorSeverity } from "./constants";
  * severity: The severity of the error.
  */
 export interface ErrorOptions {
+  cause?: Error;
   code?: string;
   message: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Metadata;
   name?: string;
   severity?: Severity;
 }
 
 /**
+ * Represents the metadata for the error.
+ */
+export type Metadata = Record<string, unknown>;
+
+/**
  * Represents the severity levels for an error.
  */
 export type Severity = (typeof ErrorSeverity)[keyof typeof ErrorSeverity];
+
+/**
+ * Represents the serialized error.
+ */
+export interface SerializedError {
+  cause?: SerializedError;
+  id: string;
+  message: string;
+  metadata: Record<string, unknown>;
+  name: string;
+  severity: Severity;
+  timestamp: string;
+}
+
+/**
+ * Represents the serialized error chain.
+ */
+export type SerializedErrorChain = Omit<SerializedError, "cause">;
