@@ -5,6 +5,8 @@ export default [
   {
     rules: {
       "perfectionist/sort-classes": "off",
+      "perfectionist/sort-modules": "off",
+      "unicorn/no-array-reduce": "off",
     },
   },
 ];

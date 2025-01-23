@@ -1,58 +1,48 @@
-import type { HandlerError } from "./handler-error";
-import { ERROR_TYPES, LOG_TYPES, SEVERITIES } from "./constants";
+import { ErrorSeverity } from "./constants";
 
-export interface BrowserInfo {
-  cookiesEnabled: boolean;
-  language: string;
-  platform: string;
-  screenResolution?: {
-    height: number;
-    width: number;
-  };
-  url: string;
-  userAgent: string;
-}
-export type Environment = "browser" | "node" | "unknown";
-
-export interface EnvironmentInfo {
-  browserInfo?: BrowserInfo;
-  environment: Environment;
-  isProduction?: boolean;
-  serverInfo?: ServerInfo;
-}
-export type ErrorType = (typeof ERROR_TYPES)[number];
-export interface HandlerErrorOptions {
-  getEnvironmentInfo?: boolean;
-}
-export type HandlerErrorProperties = ClassProperties<HandlerError>;
-
-export type LogType = (typeof LOG_TYPES)[number];
-
-export interface ServerInfo {
-  cpuArch: string;
-  hostname?: string;
-  nodeVersion: string;
-  osRelease?: string;
-  osType?: string;
-  platform: string;
-  systemUptime: number;
+/**
+ * Represents the options for creating a new error.
+ *
+ * cause: The cause of the error.
+ * code: Error code for the error.
+ * message: The error message.
+ * metadata: Additional metadata for the error.
+ * name: The name of the error.
+ * severity: The severity of the error.
+ */
+export interface ErrorOptions {
+  cause?: Error;
+  code?: string;
+  message: string;
+  metadata?: Metadata;
+  name?: string;
+  severity?: Severity;
 }
 
-export type Severity = (typeof SEVERITIES)[number];
+/**
+ * Represents the metadata for the error.
+ */
+export type Metadata = Record<string, unknown>;
 
-export interface StackFrame {
-  col?: number;
-  file?: string;
-  line?: number;
-  method?: string;
+/**
+ * Represents the severity levels for an error.
+ */
+export type Severity = (typeof ErrorSeverity)[keyof typeof ErrorSeverity];
+
+/**
+ * Represents the serialized error.
+ */
+export interface SerializedError {
+  cause?: SerializedError;
+  id: string;
+  message: string;
+  metadata: Record<string, unknown>;
+  name: string;
+  severity: Severity;
+  timestamp: string;
 }
 
-type ClassProperties<C> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- any is required here
-  [Key in keyof C as C[Key] extends (...arguments_: any[]) => any ? never : Key]: C extends Record<
-    Key,
-    C[Key]
-  >
-    ? C[Key]
-    : C[Key] | undefined;
-};
+/**
+ * Represents the serialized error chain.
+ */
+export type SerializedErrorChain = Omit<SerializedError, "cause">;
