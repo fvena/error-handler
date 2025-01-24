@@ -6,7 +6,7 @@ describe("JsonFormatter", () => {
   describe("format", () => {
     it("should format error with JSON", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: false,
@@ -27,7 +27,7 @@ describe("JsonFormatter", () => {
 
     it("should format error with JSON with timestamp", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: false,
@@ -49,7 +49,7 @@ describe("JsonFormatter", () => {
 
     it("should format error with JSON with metadata", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new JsonFormatter({
         showMetadata: true,
         showStackTrace: false,
@@ -76,7 +76,7 @@ describe("JsonFormatter", () => {
 
     it("should format error with JSON with stack trace", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: true,
@@ -100,8 +100,8 @@ describe("JsonFormatter", () => {
   describe("formatChain", () => {
     it("should format error chain with JSON", () => {
       // Arrange
-      const error1 = new HandlerError({ message: "Test error 1" });
-      const error2 = new HandlerError({ message: "Test error 2" });
+      const error1 = new HandlerError("Test error 1");
+      const error2 = new HandlerError("Test error 2");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: false,
@@ -128,8 +128,8 @@ describe("JsonFormatter", () => {
 
     it("should format error chain with JSON with timestamp", () => {
       // Arrange
-      const error1 = new HandlerError({ message: "Test error 1" });
-      const error2 = new HandlerError({ message: "Test error 2" });
+      const error1 = new HandlerError("Test error 1");
+      const error2 = new HandlerError("Test error 2");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: false,
@@ -158,8 +158,8 @@ describe("JsonFormatter", () => {
 
     it("should format error chain with JSON with metadata", () => {
       // Arrange
-      const error1 = new HandlerError({ message: "Test error 1", metadata: { key: "value" } });
-      const error2 = new HandlerError({ message: "Test error 2", metadata: { key: "value" } });
+      const error1 = new HandlerError("Test error 1", { key: "value" });
+      const error2 = new HandlerError("Test error 2", { key: "value" });
       const formatter = new JsonFormatter({
         showMetadata: true,
         showStackTrace: false,
@@ -195,8 +195,8 @@ describe("JsonFormatter", () => {
 
     it("should format error chain with JSON with stack trace", () => {
       // Arrange
-      const error1 = new HandlerError({ message: "Test error 1" });
-      const error2 = new HandlerError({ message: "Test error 2" });
+      const error1 = new HandlerError("Test error 1");
+      const error2 = new HandlerError("Test error 2");
       const formatter = new JsonFormatter({
         showMetadata: false,
         showStackTrace: true,

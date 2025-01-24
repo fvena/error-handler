@@ -7,9 +7,9 @@ interface TestFormatterOptions extends FormatterOptions {
   testName: string;
 }
 
-const error = new HandlerError({ message: "Test error" });
-const error1 = new HandlerError({ message: "First error" });
-const error2 = new HandlerError({ message: "Second error" });
+const error = new HandlerError("Test error");
+const error1 = new HandlerError("First error");
+const error2 = new HandlerError("Second error");
 const defaultOptions: TestFormatterOptions = {
   testName: "TestFormatter",
 };

@@ -3,106 +3,201 @@ import { HandlerError } from "../../src/core/handler-error";
 import { ErrorSeverity } from "../../src/core/constants";
 
 describe("HandlerError", () => {
-  it("should create an error with basic properties", () => {
-    // Arrange & Act
-    const error = new HandlerError({ message: "Test error" });
+  describe("constructor", () => {
+    it("should create an error only with message", () => {
+      // Arrange & Act
+      const error = new HandlerError("Test error");
 
-    // Assert
-    expect(error.message).toBe("Test error");
-    expect(error.name).toBe("HandlerError");
-    expect(error.severity).toBe(ErrorSeverity.ERROR);
-    expect(error.metadata).toEqual({});
-  });
-
-  it("should create an error with custom properties", () => {
-    // Arrange
-    const metadata = { key: "value" };
-
-    // Act
-    const error = new HandlerError({
-      code: "ERR001",
-      message: "Test error",
-      metadata,
-      name: "CustomError",
-      severity: ErrorSeverity.CRITICAL,
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBeUndefined();
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual({});
+      expect(error.cause).toBeUndefined();
     });
 
-    // Assert
-    expect(error.message).toBe("Test error");
-    expect(error.name).toBe("CustomError");
-    expect(error.metadata).toBe(metadata);
-    expect(error.code).toBe("ERR001");
-    expect(error.severity).toBe(ErrorSeverity.CRITICAL);
-  });
+    it("should create an error with message and error", () => {
+      // Arrange & Act
+      const rootError = new Error("Root error");
+      const error = new HandlerError("Test error", rootError);
 
-  it("should generate a unique ID for each instance", () => {
-    // Arrange & Act
-    const error1 = new HandlerError({ message: "Test error 1" });
-    const error2 = new HandlerError({ message: "Test error 2" });
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBeUndefined();
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual({});
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Root error");
+    });
 
-    // Assert
-    expect(error1.id).not.toBe(error2.id);
-  });
+    it("should create an error with message and metadata", () => {
+      // Arrange & Act
+      const metadata = { key: "value" };
+      const error = new HandlerError("Test error", metadata);
 
-  it("should handle HandlerError error as cause", () => {
-    // Arrange
-    const cause = new HandlerError({ message: "Test cause" });
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBeUndefined();
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual(metadata);
+      expect(error.cause).toBeUndefined();
+    });
 
-    // Act
-    const error = new HandlerError({ cause, message: "Test error" });
+    it("should create an error with message, metadata and error", () => {
+      // Arrange & Act
+      const metadata = { key: "value" };
+      const rootError = new Error("Root error");
+      const error = new HandlerError("Test error", metadata, rootError);
 
-    // Assert
-    expect(error.cause).toBeInstanceOf(HandlerError);
-    expect(error.cause?.message).toBe("Test cause");
-  });
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBeUndefined();
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual(metadata);
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Root error");
+    });
 
-  it("should handle standard error as cause", () => {
-    // Arrange
-    const cause = new Error("Test cause");
+    it("should create an error with message and code", () => {
+      // Arrange & Act
+      const error = new HandlerError("Test error", "VAL001");
 
-    // Act
-    const error = new HandlerError({ cause, message: "Test error" });
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBe("VAL001");
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual({});
+      expect(error.cause).toBeUndefined();
+    });
 
-    // Assert
-    expect(error.cause).toBeInstanceOf(HandlerError);
-    expect(error.cause?.message).toBe("Test cause");
-  });
+    it("should create an error with message, code and error", () => {
+      // Arrange & Act
+      const rootError = new Error("Root error");
+      const error = new HandlerError("Test error", "VAL001", rootError);
 
-  it("should throw an error for invalid cause", () => {
-    // Arrange
-    const cause = "Test cause" as unknown as Error;
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBe("VAL001");
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual({});
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Root error");
+    });
 
-    // Act & Assert
-    expect(() => new HandlerError({ cause, message: "Test error" })).toThrowError(TypeError);
-  });
+    it("should create an error with message, code and metadata", () => {
+      // Arrange & Act
+      const metadata = { key: "value" };
+      const error = new HandlerError("Test error", "VAL001", metadata);
 
-  it("should serialize the error", () => {
-    // Arrange
-    const error = new HandlerError({ message: "Test error" });
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBe("VAL001");
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual(metadata);
+      expect(error.cause).toBeUndefined();
+    });
 
-    // Act
-    const serializedError = error.serialize();
+    it("should create an error with message, code, metadata and error", () => {
+      // Arrange & Act
+      const metadata = { key: "value" };
+      const rootError = new Error("Root error");
+      const error = new HandlerError("Test error", "VAL001", metadata, rootError);
 
-    // Assert
-    expect(serializedError).toStrictEqual({
-      cause: undefined,
-      id: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
-      message: "Test error",
-      metadata: {},
-      name: "HandlerError",
-      severity: ErrorSeverity.ERROR,
-      timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+      // Assert
+      expect(error.message).toBe("Test error");
+      expect(error.name).toBe("HandlerError");
+      expect(error.code).toBe("VAL001");
+      expect(error.severity).toBe(ErrorSeverity.ERROR);
+      expect(error.metadata).toEqual(metadata);
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Root error");
+    });
+
+    it("should generate a unique ID for each instance", () => {
+      // Arrange & Act
+      const error1 = new HandlerError("Test error 1");
+      const error2 = new HandlerError("Test error 2");
+
+      // Assert
+      expect(error1.id).not.toBe(error2.id);
     });
   });
 
-  it("should return a string representation of the error", () => {
-    // Arrange
-    const error = new HandlerError({ message: "Test error" });
+  describe("convertToHandlerError", () => {
+    it("should handle standard error as cause", () => {
+      // Arrange
+      const cause = new Error("Test cause");
 
-    // Act
-    const errorString = error.toString();
+      // Act
+      const error = new HandlerError("Test error", cause);
 
-    // Assert
-    expect(errorString).toBe(`[ERROR] HandlerError: Test error (ID: ${error.id})`);
+      // Assert
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Test cause");
+    });
+
+    it("should handle HandlerError as cause", () => {
+      // Arrange
+      const cause = new HandlerError("Test cause");
+
+      // Act
+      const error = new HandlerError("Test error", cause);
+
+      // Assert
+      expect(error.cause).toBeInstanceOf(HandlerError);
+      expect(error.cause?.message).toBe("Test cause");
+    });
+
+    it("should not set the cause if not is a Error", () => {
+      // Arrange
+      const cause = "Test cause" as unknown as Error;
+
+      // Act
+      const error = new HandlerError("Test error", cause);
+
+      // Assert
+      expect(error.cause).toBeUndefined();
+    });
+  });
+
+  describe("serialize", () => {
+    it("should serialize the error", () => {
+      // Arrange
+      const error = new HandlerError("Test error");
+
+      // Act
+      const serializedError = error.serialize();
+
+      // Assert
+      expect(serializedError).toStrictEqual({
+        cause: undefined,
+        id: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+        message: "Test error",
+        metadata: {},
+        name: "HandlerError",
+        severity: ErrorSeverity.ERROR,
+        timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+      });
+    });
+  });
+
+  describe("toString", () => {
+    it("should return a string representation of the error", () => {
+      // Arrange
+      const error = new HandlerError("Test error");
+
+      // Act
+      const errorString = error.toString();
+
+      // Assert
+      expect(errorString).toBe(`[ERROR] HandlerError: Test error (ID: ${error.id})`);
+    });
   });
 });

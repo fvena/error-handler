@@ -86,7 +86,7 @@ describe("FormatterRegistry", () => {
 
   it("should format error using registered formatters", () => {
     // Arrange
-    const error = new HandlerError({ message: "Test error" });
+    const error = new HandlerError("Test error");
     const formatters = new FormatterRegistry();
     formatters.register("test", () => new TestFormatter());
 
@@ -99,9 +99,9 @@ describe("FormatterRegistry", () => {
 
   it("should format chain of errors using registered formatters", () => {
     // Arrange
-    const rootError = new HandlerError({ message: "Root error" });
-    const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-    const topError = new HandlerError({ cause: middleError, message: "Top error" });
+    const rootError = new HandlerError("Root error");
+    const middleError = new HandlerError("Middle error", rootError);
+    const topError = new HandlerError("Top error", middleError);
 
     const formatters = new FormatterRegistry();
     formatters.register("test", () => new TestFormatter());

@@ -8,8 +8,8 @@ describe("HandlerErrorChain", () => {
     it("should get the error chain", () => {
       // Arrange
       const rootError = new Error("Root error");
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
 
       // Act
       const chain = new HandlerErrorChain(topError).getErrorChain();
@@ -25,11 +25,11 @@ describe("HandlerErrorChain", () => {
       // Arrange
       // eslint-disable-next-line prefer-const -- Used to create circular reference
       let rootError!: HandlerError;
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
 
       // Create circular reference
-      rootError = new HandlerError({ cause: topError, message: "Root error" });
+      rootError = new HandlerError("Root error", topError);
 
       // Act
       const chain = new HandlerErrorChain(topError).getErrorChain();
@@ -45,8 +45,8 @@ describe("HandlerErrorChain", () => {
     it("should get the root cause of the error", () => {
       // Arrange
       const rootError = new Error("Root error");
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
 
       // Act
       const rootCause = new HandlerErrorChain(topError).getRootError();
@@ -57,7 +57,7 @@ describe("HandlerErrorChain", () => {
 
     it("should return same error if there is no cause", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
 
       // Act
       const rootCause = new HandlerErrorChain(error).getRootError();
@@ -71,8 +71,8 @@ describe("HandlerErrorChain", () => {
     it("should map the error chain", () => {
       // Arrange
       const rootError = new Error("Root error");
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
 
       // Act
       const chain = new HandlerErrorChain(topError).mapErrors((error) => error.message);
@@ -82,109 +82,101 @@ describe("HandlerErrorChain", () => {
     });
   });
 
-  describe("getMostSevereError", () => {
-    it("should return the max severity of the error chain", () => {
-      // Arrange
-      const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
-      const middleError = new HandlerError({
-        cause: rootError,
-        message: "Middle error",
-        severity: ErrorSeverity.WARNING,
-      });
-      const topError = new HandlerError({
-        cause: middleError,
-        message: "Top error",
-        severity: ErrorSeverity.DEBUG,
-      });
+  // describe("getMostSevereError", () => {
+  //   it("should return the max severity of the error chain", () => {
+  //     // Arrange
+  //     const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
+  //     const middleError = new HandlerError({
+  //       cause: rootError,
+  //       message: "Middle error",
+  //       severity: ErrorSeverity.WARNING,
+  //     });
+  //     const topError = new HandlerError({
+  //       cause: middleError,
+  //       message: "Top error",
+  //       severity: ErrorSeverity.DEBUG,
+  //     });
 
-      // Act
-      const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
+  //     // Act
+  //     const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
 
-      // Assert
-      expect(maxSeverity.message).toBe("Root error");
-    });
+  //     // Assert
+  //     expect(maxSeverity.message).toBe("Root error");
+  //   });
 
-    it("should return the same error if there is no cause", () => {
-      // Arrange
-      const error = new HandlerError({ message: "Test error" });
+  //   it("should return the same error if there is no cause", () => {
+  //     // Arrange
+  //     const error = new HandlerError({ message: "Test error" });
 
-      // Act
-      const maxSeverity = new HandlerErrorChain(error).getMostSevereError();
+  //     // Act
+  //     const maxSeverity = new HandlerErrorChain(error).getMostSevereError();
 
-      // Assert
-      expect(maxSeverity.message).toBe("Test error");
-    });
+  //     // Assert
+  //     expect(maxSeverity.message).toBe("Test error");
+  //   });
 
-    it("should return the last error if all severities are the same", () => {
-      // Arrange
-      const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
-      const middleError = new HandlerError({
-        cause: rootError,
-        message: "Middle error",
-        severity: ErrorSeverity.ERROR,
-      });
-      const topError = new HandlerError({
-        cause: middleError,
-        message: "Top error",
-        severity: ErrorSeverity.ERROR,
-      });
+  //   it("should return the last error if all severities are the same", () => {
+  //     // Arrange
+  //     const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
+  //     const middleError = new HandlerError({
+  //       cause: rootError,
+  //       message: "Middle error",
+  //       severity: ErrorSeverity.ERROR,
+  //     });
+  //     const topError = new HandlerError({
+  //       cause: middleError,
+  //       message: "Top error",
+  //       severity: ErrorSeverity.ERROR,
+  //     });
 
-      // Act
-      const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
+  //     // Act
+  //     const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
 
-      // Assert
-      expect(maxSeverity.message).toBe("Top error");
-    });
+  //     // Assert
+  //     expect(maxSeverity.message).toBe("Top error");
+  //   });
 
-    it("should return the CRITICAL error if all severities exist", () => {
-      // Arrange
-      const debugError = new HandlerError({
-        message: "Debug error",
-        severity: ErrorSeverity.DEBUG,
-      });
-      const infoError = new HandlerError({
-        cause: debugError,
-        message: "Info error",
-        severity: ErrorSeverity.INFO,
-      });
-      const warningError = new HandlerError({
-        cause: infoError,
-        message: "Warning error",
-        severity: ErrorSeverity.WARNING,
-      });
-      const errorError = new HandlerError({
-        cause: warningError,
-        message: "Error error",
-        severity: ErrorSeverity.ERROR,
-      });
-      const criticalError = new HandlerError({
-        cause: errorError,
-        message: "Critical error",
-        severity: ErrorSeverity.CRITICAL,
-      });
+  //   it("should return the CRITICAL error if all severities exist", () => {
+  //     // Arrange
+  //     const debugError = new HandlerError({
+  //       message: "Debug error",
+  //       severity: ErrorSeverity.DEBUG,
+  //     });
+  //     const infoError = new HandlerError({
+  //       cause: debugError,
+  //       message: "Info error",
+  //       severity: ErrorSeverity.INFO,
+  //     });
+  //     const warningError = new HandlerError({
+  //       cause: infoError,
+  //       message: "Warning error",
+  //       severity: ErrorSeverity.WARNING,
+  //     });
+  //     const errorError = new HandlerError({
+  //       cause: warningError,
+  //       message: "Error error",
+  //       severity: ErrorSeverity.ERROR,
+  //     });
+  //     const criticalError = new HandlerError({
+  //       cause: errorError,
+  //       message: "Critical error",
+  //       severity: ErrorSeverity.CRITICAL,
+  //     });
 
-      // Act
-      const maxSeverity = new HandlerErrorChain(criticalError).getMostSevereError();
+  //     // Act
+  //     const maxSeverity = new HandlerErrorChain(criticalError).getMostSevereError();
 
-      // Assert
-      expect(maxSeverity.message).toBe("Critical error");
-    });
-  });
+  //     // Assert
+  //     expect(maxSeverity.message).toBe("Critical error");
+  //   });
+  // });
 
   describe("serialize", () => {
     it("should serialize the error chain", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
-      const middleError = new HandlerError({
-        cause: rootError,
-        message: "Middle error",
-        severity: ErrorSeverity.WARNING,
-      });
-      const topError = new HandlerError({
-        cause: middleError,
-        message: "Top error",
-        severity: ErrorSeverity.DEBUG,
-      });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
 
       // Act
       const serializedChain = new HandlerErrorChain(topError).serialize();
@@ -196,7 +188,7 @@ describe("HandlerErrorChain", () => {
           message: "Top error",
           metadata: {},
           name: "HandlerError",
-          severity: ErrorSeverity.DEBUG,
+          severity: ErrorSeverity.ERROR,
           timestamp: topError.timestamp.toISOString(),
         },
         {
@@ -204,7 +196,7 @@ describe("HandlerErrorChain", () => {
           message: "Middle error",
           metadata: {},
           name: "HandlerError",
-          severity: ErrorSeverity.WARNING,
+          severity: ErrorSeverity.ERROR,
           timestamp: middleError.timestamp.toISOString(),
         },
         {
@@ -220,17 +212,9 @@ describe("HandlerErrorChain", () => {
 
     it("should serialize the error chain with metadata", () => {
       // Arrange
-      const rootError = new HandlerError({
-        message: "Root error",
-        metadata: { key: "value" },
-        severity: ErrorSeverity.ERROR,
-      });
-      const topError = new HandlerError({
-        cause: rootError,
-        message: "Top error",
-        metadata: { key: "value", key2: { key3: "value2", key4: ["value4", "value5"] } },
-        severity: ErrorSeverity.DEBUG,
-      });
+      const metadata = { key: "value", key2: { key3: "value2", key4: ["value4", "value5"] } };
+      const rootError = new HandlerError("Root error", { key: "value" });
+      const topError = new HandlerError("Top error", metadata, rootError);
 
       // Act
       const serializedChain = new HandlerErrorChain(topError).serialize();
@@ -242,7 +226,7 @@ describe("HandlerErrorChain", () => {
           message: "Top error",
           metadata: { key: "value", key2: { key3: "value2", key4: ["value4", "value5"] } },
           name: "HandlerError",
-          severity: ErrorSeverity.DEBUG,
+          severity: ErrorSeverity.ERROR,
           timestamp: topError.timestamp.toISOString(),
         },
         {

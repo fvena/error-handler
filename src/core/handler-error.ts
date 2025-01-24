@@ -1,8 +1,8 @@
-import type { ErrorOptions, Metadata, Severity } from "./types/error-types";
+import type { Metadata, Severity } from "./types/error-types";
 import type { SerializedError } from "./types/serialize-types";
 import crypto from "node:crypto";
 import { ErrorSeverity } from "./constants";
-import { HandlerErrorChain } from "./error-chain";
+import { isHandlerError } from "./guards/error-guards";
 
 /**
  * Base error class for handling and managing errors
@@ -13,7 +13,6 @@ export class HandlerError extends Error {
   public readonly severity: Severity; // Severity of the error
   public readonly code?: string; // Error code for the error
   public readonly metadata: Metadata; // Additional metadata for the error
-  public readonly errorChain: HandlerErrorChain; // The error chain for the error
   public override cause?: HandlerError; // The cause of the error
 
   /**
@@ -27,21 +26,43 @@ export class HandlerError extends Error {
    * - `name` (optional string): The name of the error. Defaults to the class name.
    * - `severity` (optional Severity): The severity of the error. Defaults to `ErrorSeverity.ERROR`.
    */
-  constructor(options: ErrorOptions) {
-    super(options.message);
+  constructor(
+    message: string,
+    argument2?: Error | Metadata | string,
+    argument3?: Error | Metadata,
+    argument4?: Error,
+  ) {
+    super(message);
 
     // Initialize basic properties
     this.id = crypto.randomUUID();
-    this.name = options.name ?? this.constructor.name;
+    this.name = this.constructor.name;
+    this.severity = ErrorSeverity.ERROR;
     this.timestamp = new Date();
-    this.severity = options.severity ?? ErrorSeverity.ERROR;
-    this.code = options.code;
-    this.metadata = options.metadata ?? {};
-    this.errorChain = new HandlerErrorChain(this);
 
-    // Handle cause
-    if (options.cause) {
-      this.setCause(options.cause);
+    this.code = undefined;
+    this.metadata = {};
+
+    if (typeof argument2 === "string") {
+      this.code = argument2;
+
+      if (argument3 && !(argument3 instanceof Error)) {
+        this.metadata = argument3;
+
+        if (argument4 && argument4 instanceof Error) {
+          this.cause = this.convertToHandlerError(argument4);
+        }
+      } else if (argument3 && argument3 instanceof Error) {
+        this.cause = this.convertToHandlerError(argument3);
+      }
+    } else if (argument2 && argument2 instanceof Error) {
+      this.cause = this.convertToHandlerError(argument2);
+    } else if (argument2) {
+      this.metadata = argument2;
+
+      if (argument3 && argument3 instanceof Error) {
+        this.cause = this.convertToHandlerError(argument3);
+      }
     }
   }
 
@@ -50,19 +71,8 @@ export class HandlerError extends Error {
    *
    * @param error - The error that caused this error.
    */
-  private setCause(error: Error) {
-    if (error instanceof HandlerError) {
-      this.cause = error;
-    } else if (error instanceof Error) {
-      // Convert standard error to HandlerError
-      this.cause = new HandlerError({
-        message: error.message,
-        name: error.name,
-        severity: ErrorSeverity.ERROR,
-      });
-    } else {
-      throw new TypeError("Cause must be an instance of Error or HandlerError");
-    }
+  private convertToHandlerError(error: Error) {
+    return isHandlerError(error) ? error : new HandlerError(error.message, { cause: error });
   }
 
   /**

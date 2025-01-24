@@ -6,7 +6,7 @@ describe("HtmlFormatter", () => {
   describe("format", () => {
     it("should format error with HTML tags", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new HtmlFormatter({ showTimestamp: false });
 
       // Act
@@ -23,7 +23,7 @@ describe("HtmlFormatter", () => {
 
     it("should format error with HTML tags with timestamp", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new HtmlFormatter({ showTimestamp: true });
 
       // Act
@@ -37,7 +37,7 @@ describe("HtmlFormatter", () => {
 
     it("should format error with HTML tags with metadata", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new HtmlFormatter({ showMetadata: true });
 
       // Act
@@ -51,7 +51,7 @@ describe("HtmlFormatter", () => {
 
     it("should format error with HTML tags with stack trace", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new HtmlFormatter({ showStackTrace: true });
 
       // Act
@@ -63,9 +63,8 @@ describe("HtmlFormatter", () => {
 
     it("should escape HTLM characters", () => {
       // Arrange
-      const error = new HandlerError({
-        message: "<script>alert('XSS')</script>",
-        metadata: { key: "<script>alert('XSS')</script>" },
+      const error = new HandlerError("<script>alert('XSS')</script>", {
+        key: "<script>alert('XSS')</script>",
       });
       const formatter = new HtmlFormatter({ showMetadata: true, showTimestamp: false });
 
@@ -85,9 +84,9 @@ describe("HtmlFormatter", () => {
   describe("formatChain", () => {
     it("should format error chain with HTML tags", () => {
       // Arrange
-      const error1 = new HandlerError({ message: "Test error 1" });
-      const error2 = new HandlerError({ message: "Test error 2" });
-      const error3 = new HandlerError({ message: "Test error 3" });
+      const error1 = new HandlerError("Test error 1");
+      const error2 = new HandlerError("Test error 2");
+      const error3 = new HandlerError("Test error 3");
       const formatter = new HtmlFormatter({ showTimestamp: false });
 
       // Act

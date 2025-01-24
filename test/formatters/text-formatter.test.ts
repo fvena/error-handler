@@ -6,7 +6,7 @@ describe("TextFormatter", () => {
   describe("format", () => {
     it("should format error with text", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new TextFormatter({ showMetadata: false, showTimestamp: false });
 
       // Act
@@ -18,7 +18,7 @@ describe("TextFormatter", () => {
 
     it("should format error with text with timestamp", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new TextFormatter({ showMetadata: false, showTimestamp: true });
 
       // Act
@@ -30,7 +30,7 @@ describe("TextFormatter", () => {
 
     it("should format error with text with metadata", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new TextFormatter({ showMetadata: true, showTimestamp: false });
 
       // Act
@@ -42,7 +42,7 @@ describe("TextFormatter", () => {
 
     it("should format error with text with all options", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new TextFormatter({ showMetadata: true, showTimestamp: true });
 
       // Act
@@ -58,9 +58,9 @@ describe("TextFormatter", () => {
   describe("formatChain", () => {
     it("should format error chain with text", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error" });
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
       const formatter = new TextFormatter({ showMetadata: false, showTimestamp: false });
 
       // Act
@@ -78,9 +78,9 @@ describe("TextFormatter", () => {
 
     it("should format error chain with text with timestamp", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error" });
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
       const formatter = new TextFormatter({ showMetadata: false, showTimestamp: true });
 
       // Act
@@ -98,17 +98,9 @@ describe("TextFormatter", () => {
 
     it("should format error chain with text with metadata", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error", metadata: { key: "value" } });
-      const middleError = new HandlerError({
-        cause: rootError,
-        message: "Middle error",
-        metadata: { key: "value" },
-      });
-      const topError = new HandlerError({
-        cause: middleError,
-        message: "Top error",
-        metadata: { key: "value" },
-      });
+      const rootError = new HandlerError("Root error", { key: "value" });
+      const middleError = new HandlerError("Middle error", { key: "value" }, rootError);
+      const topError = new HandlerError("Top error", { key: "value" }, middleError);
       const formatter = new TextFormatter({ showMetadata: true, showTimestamp: false });
 
       // Act
@@ -126,17 +118,9 @@ describe("TextFormatter", () => {
 
     it("should format error chain with text with all options", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error", metadata: { key: "value" } });
-      const middleError = new HandlerError({
-        cause: rootError,
-        message: "Middle error",
-        metadata: { key: "value" },
-      });
-      const topError = new HandlerError({
-        cause: middleError,
-        message: "Top error",
-        metadata: { key: "value" },
-      });
+      const rootError = new HandlerError("Root error", { key: "value" });
+      const middleError = new HandlerError("Middle error", { key: "value" }, rootError);
+      const topError = new HandlerError("Top error", { key: "value" }, middleError);
       const formatter = new TextFormatter({ showMetadata: true, showTimestamp: true });
 
       // Act

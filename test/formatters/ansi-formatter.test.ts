@@ -7,7 +7,7 @@ describe("AnsiFormatter", () => {
   describe("format", () => {
     it("should format error with ANSI colors", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new AnsiFormatter();
 
       // Act
@@ -21,7 +21,7 @@ describe("AnsiFormatter", () => {
 
     it("should format error without ANSI colors", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new AnsiFormatter({ colors: false });
 
       // Act
@@ -33,7 +33,7 @@ describe("AnsiFormatter", () => {
 
     it("should format error with ANSI colors with timestamp", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error" });
+      const error = new HandlerError("Test error");
       const formatter = new AnsiFormatter({ showTimestamp: true });
 
       // Act
@@ -47,7 +47,7 @@ describe("AnsiFormatter", () => {
 
     it("should format error with ANSI colors with metadata", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new AnsiFormatter({ showMetadata: true });
 
       // Act
@@ -61,7 +61,7 @@ describe("AnsiFormatter", () => {
 
     it("should format error with ANSI colors with all options", () => {
       // Arrange
-      const error = new HandlerError({ message: "Test error", metadata: { key: "value" } });
+      const error = new HandlerError("Test error", { key: "value" });
       const formatter = new AnsiFormatter({ showMetadata: true, showTimestamp: true });
 
       // Act
@@ -77,9 +77,9 @@ describe("AnsiFormatter", () => {
   describe("formatChain", () => {
     it("should format error chain with ANSI colors", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error" });
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
       const formatter = new AnsiFormatter();
 
       // Act
@@ -97,9 +97,9 @@ describe("AnsiFormatter", () => {
 
     it("should format error chain without ANSI colors", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error" });
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
       const formatter = new AnsiFormatter({ colors: false });
 
       // Act
@@ -117,9 +117,9 @@ describe("AnsiFormatter", () => {
 
     it("should format error chain with ANSI colors with timestamp", () => {
       // Arrange
-      const rootError = new HandlerError({ message: "Root error" });
-      const middleError = new HandlerError({ cause: rootError, message: "Middle error" });
-      const topError = new HandlerError({ cause: middleError, message: "Top error" });
+      const rootError = new HandlerError("Root error");
+      const middleError = new HandlerError("Middle error", rootError);
+      const topError = new HandlerError("Top error", middleError);
       const formatter = new AnsiFormatter({ showTimestamp: true });
 
       // Act
