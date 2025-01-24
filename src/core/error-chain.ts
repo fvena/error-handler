@@ -1,4 +1,4 @@
-import type { SerializedErrorChain } from "./types";
+import type { SerializedErrorChain } from "./types/serialize-types";
 import { SEVERITY_WEIGHTS } from "./constants";
 import { HandlerError } from "./handler-error";
 

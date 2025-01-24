@@ -17,6 +17,11 @@ export const ErrorSeverity = {
 } as const;
 /* eslint-enable perfectionist/sort-objects */
 
+/**
+ * Represents the severity levels for an error.
+ *
+ * Higher numbers: more critical severity
+ */
 export const SEVERITY_WEIGHTS = {
   [ErrorSeverity.CRITICAL]: 5,
   [ErrorSeverity.DEBUG]: 1,
@@ -24,12 +29,3 @@ export const SEVERITY_WEIGHTS = {
   [ErrorSeverity.INFO]: 2,
   [ErrorSeverity.WARNING]: 3,
 } as const;
-
-/**
- * Represents the types of logs that can be generated.
- *
- * - `'compact'`: A compact representation of an error, suitable for centralized logging systems.
- * - `'detail'`: Detailed information about an error.
- * - `'simple'`: A simple representation of an error.
- */
-export const LOG_TYPES = ["compact", "detail", "simple"] as const;

@@ -1,4 +1,4 @@
-import { ErrorSeverity } from "./constants";
+import { ErrorSeverity } from "../constants";
 
 /**
  * Represents the options for creating a new error.
@@ -28,21 +28,3 @@ export type Metadata = Record<string, unknown>;
  * Represents the severity levels for an error.
  */
 export type Severity = (typeof ErrorSeverity)[keyof typeof ErrorSeverity];
-
-/**
- * Represents the serialized error.
- */
-export interface SerializedError {
-  cause?: SerializedError;
-  id: string;
-  message: string;
-  metadata: Record<string, unknown>;
-  name: string;
-  severity: Severity;
-  timestamp: string;
-}
-
-/**
- * Represents the serialized error chain.
- */
-export type SerializedErrorChain = Omit<SerializedError, "cause">;

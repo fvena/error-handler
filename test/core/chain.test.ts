@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { HandlerError } from "../src/handler-error";
-import { HandlerErrorChain } from "../src/error-chain";
-import { ErrorSeverity } from "../src/constants";
+import { HandlerError } from "../../src/core/handler-error";
+import { HandlerErrorChain } from "../../src/core/error-chain";
+import { ErrorSeverity } from "../../src/core/constants";
 
 describe("HandlerErrorChain", () => {
   describe("getErrorChain", () => {

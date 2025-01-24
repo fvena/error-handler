@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { HandlerError } from "../src/handler-error";
-import { ErrorSeverity } from "../src/constants";
+import { HandlerError } from "../../src/core/handler-error";
+import { ErrorSeverity } from "../../src/core/constants";
 
 describe("HandlerError", () => {
   it("should create an error with basic properties", () => {
