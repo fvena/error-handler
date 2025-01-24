@@ -167,6 +167,85 @@ describe("HandlerError", () => {
     });
   });
 
+  describe("severity", () => {
+    it("should create an error with the specified severity", () => {
+      // Arrange
+      const errorCritical = new HandlerError.critical("Test critical error");
+      const errorError = new HandlerError.error("Test error error");
+      const errorWarning = new HandlerError.warning("Test warning error");
+      const errorInfo = new HandlerError.info("Test info error");
+      const errorDebug = new HandlerError.debug("Test debug error");
+
+      // Assert
+      expect(errorCritical.severity).toBe(ErrorSeverity.CRITICAL);
+      expect(errorError.severity).toBe(ErrorSeverity.ERROR);
+      expect(errorWarning.severity).toBe(ErrorSeverity.WARNING);
+      expect(errorInfo.severity).toBe(ErrorSeverity.INFO);
+      expect(errorDebug.severity).toBe(ErrorSeverity.DEBUG);
+    });
+
+    it("should create an error with the specified severity and metadata", () => {
+      // Arrange
+      const metadata = { key: "value" };
+
+      // Act
+      const errorCritical = new HandlerError.critical("Test critical error", metadata);
+
+      // Assert
+      expect(errorCritical.severity).toBe(ErrorSeverity.CRITICAL);
+      expect(errorCritical.metadata).toBe(metadata);
+    });
+
+    it("should create an error with the specified severity, metadata and error", () => {
+      // Arrange
+      const metadata = { key: "value" };
+      const rootError = new Error("Root error");
+
+      // Act
+      const errorCritical = new HandlerError.critical("Test critical error", metadata, rootError);
+
+      // Assert
+      expect(errorCritical.severity).toBe(ErrorSeverity.CRITICAL);
+      expect(errorCritical.metadata).toBe(metadata);
+      expect(errorCritical.cause).toBeInstanceOf(HandlerError);
+      expect(errorCritical.cause?.message).toBe("Root error");
+    });
+
+    it("should create an error with the specified severity, metadata and code", () => {
+      // Arrange
+      const metadata = { key: "value" };
+
+      // Act
+      const errorCritical = new HandlerError.critical("Test critical error", "VAL001", metadata);
+
+      // Assert
+      expect(errorCritical.severity).toBe(ErrorSeverity.CRITICAL);
+      expect(errorCritical.code).toBe("VAL001");
+      expect(errorCritical.metadata).toBe(metadata);
+    });
+
+    it("should create an error with the specified severity, metadata, code and error", () => {
+      // Arrange
+      const metadata = { key: "value" };
+      const rootError = new Error("Root error");
+
+      // Act
+      const errorCritical = new HandlerError.critical(
+        "Test critical error",
+        "VAL001",
+        metadata,
+        rootError,
+      );
+
+      // Assert
+      expect(errorCritical.severity).toBe(ErrorSeverity.CRITICAL);
+      expect(errorCritical.code).toBe("VAL001");
+      expect(errorCritical.metadata).toBe(metadata);
+      expect(errorCritical.cause).toBeInstanceOf(HandlerError);
+      expect(errorCritical.cause?.message).toBe("Root error");
+    });
+  });
+
   describe("serialize", () => {
     it("should serialize the error", () => {
       // Arrange

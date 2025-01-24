@@ -82,94 +82,59 @@ describe("HandlerErrorChain", () => {
     });
   });
 
-  // describe("getMostSevereError", () => {
-  //   it("should return the max severity of the error chain", () => {
-  //     // Arrange
-  //     const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
-  //     const middleError = new HandlerError({
-  //       cause: rootError,
-  //       message: "Middle error",
-  //       severity: ErrorSeverity.WARNING,
-  //     });
-  //     const topError = new HandlerError({
-  //       cause: middleError,
-  //       message: "Top error",
-  //       severity: ErrorSeverity.DEBUG,
-  //     });
+  describe("getMostSevereError", () => {
+    it("should return the max severity of the error chain", () => {
+      // Arrange
+      const rootError = new HandlerError.error("Root error");
+      const middleError = new HandlerError.warning("Middle error", rootError);
+      const topError = new HandlerError.debug("Top error", middleError);
 
-  //     // Act
-  //     const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
+      // Act
+      const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
 
-  //     // Assert
-  //     expect(maxSeverity.message).toBe("Root error");
-  //   });
+      // Assert
+      expect(maxSeverity.message).toBe("Root error");
+    });
 
-  //   it("should return the same error if there is no cause", () => {
-  //     // Arrange
-  //     const error = new HandlerError({ message: "Test error" });
+    it("should return the same error if there is no cause", () => {
+      // Arrange
+      const error = new HandlerError("Test error");
 
-  //     // Act
-  //     const maxSeverity = new HandlerErrorChain(error).getMostSevereError();
+      // Act
+      const maxSeverity = new HandlerErrorChain(error).getMostSevereError();
 
-  //     // Assert
-  //     expect(maxSeverity.message).toBe("Test error");
-  //   });
+      // Assert
+      expect(maxSeverity.message).toBe("Test error");
+    });
 
-  //   it("should return the last error if all severities are the same", () => {
-  //     // Arrange
-  //     const rootError = new HandlerError({ message: "Root error", severity: ErrorSeverity.ERROR });
-  //     const middleError = new HandlerError({
-  //       cause: rootError,
-  //       message: "Middle error",
-  //       severity: ErrorSeverity.ERROR,
-  //     });
-  //     const topError = new HandlerError({
-  //       cause: middleError,
-  //       message: "Top error",
-  //       severity: ErrorSeverity.ERROR,
-  //     });
+    it("should return the last error if all severities are the same", () => {
+      // Arrange
+      const rootError = new HandlerError.error("Root error");
+      const middleError = new HandlerError.error("Middle error", rootError);
+      const topError = new HandlerError.error("Top error", middleError);
 
-  //     // Act
-  //     const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
+      // Act
+      const maxSeverity = new HandlerErrorChain(topError).getMostSevereError();
 
-  //     // Assert
-  //     expect(maxSeverity.message).toBe("Top error");
-  //   });
+      // Assert
+      expect(maxSeverity.message).toBe("Top error");
+    });
 
-  //   it("should return the CRITICAL error if all severities exist", () => {
-  //     // Arrange
-  //     const debugError = new HandlerError({
-  //       message: "Debug error",
-  //       severity: ErrorSeverity.DEBUG,
-  //     });
-  //     const infoError = new HandlerError({
-  //       cause: debugError,
-  //       message: "Info error",
-  //       severity: ErrorSeverity.INFO,
-  //     });
-  //     const warningError = new HandlerError({
-  //       cause: infoError,
-  //       message: "Warning error",
-  //       severity: ErrorSeverity.WARNING,
-  //     });
-  //     const errorError = new HandlerError({
-  //       cause: warningError,
-  //       message: "Error error",
-  //       severity: ErrorSeverity.ERROR,
-  //     });
-  //     const criticalError = new HandlerError({
-  //       cause: errorError,
-  //       message: "Critical error",
-  //       severity: ErrorSeverity.CRITICAL,
-  //     });
+    it("should return the CRITICAL error if all severities exist", () => {
+      // Arrange
+      const debugError = new HandlerError.debug("Debug error");
+      const infoError = new HandlerError.info("Info error", debugError);
+      const warningError = new HandlerError.warning("Warning error", infoError);
+      const errorError = new HandlerError.error("Error error", warningError);
+      const criticalError = new HandlerError.critical("Critical error", errorError);
 
-  //     // Act
-  //     const maxSeverity = new HandlerErrorChain(criticalError).getMostSevereError();
+      // Act
+      const maxSeverity = new HandlerErrorChain(criticalError).getMostSevereError();
 
-  //     // Assert
-  //     expect(maxSeverity.message).toBe("Critical error");
-  //   });
-  // });
+      // Assert
+      expect(maxSeverity.message).toBe("Critical error");
+    });
+  });
 
   describe("serialize", () => {
     it("should serialize the error chain", () => {

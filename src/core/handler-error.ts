@@ -43,6 +43,7 @@ export class HandlerError extends Error {
     this.code = undefined;
     this.metadata = {};
 
+    // Parse constructor arguments
     if (typeof argument2 === "string") {
       this.code = argument2;
 
@@ -74,6 +75,41 @@ export class HandlerError extends Error {
   private convertToHandlerError(error: Error) {
     return isHandlerError(error) ? error : new HandlerError(error.message, { cause: error });
   }
+
+  /**
+   * Creates a new `HandlerError` instance with the Critical severity.
+   */
+  public static critical = class CriticalHandlerError extends HandlerError {
+    override readonly severity: Severity = ErrorSeverity.CRITICAL;
+  };
+
+  /**
+   * Creates a new `HandlerError` instance with the Error severity.
+   */
+  public static error = class ErrorHandlerError extends HandlerError {
+    override readonly severity: Severity = ErrorSeverity.ERROR;
+  };
+
+  /**
+   * Creates a new `HandlerError` instance with the Warning severity.
+   */
+  public static warning = class WarningHandlerError extends HandlerError {
+    override readonly severity: Severity = ErrorSeverity.WARNING;
+  };
+
+  /**
+   * Creates a new `HandlerError` instance with the Info severity.
+   */
+  public static info = class InfoHandlerError extends HandlerError {
+    override readonly severity: Severity = ErrorSeverity.INFO;
+  };
+
+  /**
+   * Creates a new `HandlerError` instance with the Debug severity.
+   */
+  public static debug = class DebugHandlerError extends HandlerError {
+    override readonly severity: Severity = ErrorSeverity.DEBUG;
+  };
 
   /**
    * Serializes the error into a plain object.
