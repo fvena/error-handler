@@ -1,9 +1,8 @@
 # [1.3.0](https://github.com/fvena/handler-error/compare/v1.2.0...v1.3.0) (2025-01-23)
 
-
 ### Features
 
-* add HandlerErrorChain for managing HandlerError hierarchy ([03f7a0c](https://github.com/fvena/handler-error/commit/03f7a0cab20d047b8eaef0eb83b6ba2d5e0e9583))
+- add HandlerErrorChain for managing HandlerError hierarchy ([03f7a0c](https://github.com/fvena/handler-error/commit/03f7a0cab20d047b8eaef0eb83b6ba2d5e0e9583))
 
 # [1.2.0](https://github.com/fvena/handler-error/compare/v1.1.0...v1.2.0) (2025-01-17)
 

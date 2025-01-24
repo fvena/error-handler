@@ -1,4 +1,5 @@
-import type { ErrorOptions, Metadata, SerializedError, Severity } from "./types";
+import type { ErrorOptions, Metadata, Severity } from "./types/error-types";
+import type { SerializedError } from "./types/serialize-types";
 import crypto from "node:crypto";
 import { ErrorSeverity } from "./constants";
 import { HandlerErrorChain } from "./error-chain";
@@ -50,7 +51,6 @@ export class HandlerError extends Error {
    * @param error - The error that caused this error.
    */
   private setCause(error: Error) {
-     
     if (error instanceof HandlerError) {
       this.cause = error;
     } else if (error instanceof Error) {
