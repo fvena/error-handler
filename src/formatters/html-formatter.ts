@@ -58,7 +58,7 @@ export class HtmlFormatter extends BaseFormatter<HtmlFormatterOptions> {
         <h3 class="error-title">${error.name}</h3>
         <p class="error-message">${escapeHTML(error.message)}</p>
         ${customOptions.showTimestamp ? `<div class="error-timestamp">${error.timestamp.toISOString()}</div>` : ""}
-        ${customOptions.showMetadata ? `<div class="error-metadata"><pre>${escapeHTML(JSON.stringify(error.metadata))}</pre></div>` : ""}
+        ${customOptions.showMetadata && error.metadata ? `<div class="error-metadata"><pre>${escapeHTML(JSON.stringify(error.metadata))}</pre></div>` : ""}
         ${customOptions.showStackTrace && error.stack ? `<pre class="error-stack">${error.stack}</pre>` : ""}
       </div>
     `;

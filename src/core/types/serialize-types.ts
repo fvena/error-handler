@@ -7,7 +7,7 @@ export interface SerializedError {
   cause?: SerializedError;
   id: string;
   message: string;
-  metadata: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
   name: string;
   severity: Severity;
   timestamp: string;

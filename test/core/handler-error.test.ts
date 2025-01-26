@@ -13,7 +13,7 @@ describe("HandlerError", () => {
       expect(error.name).toBe("HandlerError");
       expect(error.code).toBeUndefined();
       expect(error.severity).toBe(ErrorSeverity.ERROR);
-      expect(error.metadata).toEqual({});
+      expect(error.metadata).toBeUndefined();
       expect(error.cause).toBeUndefined();
     });
 
@@ -27,7 +27,7 @@ describe("HandlerError", () => {
       expect(error.name).toBe("HandlerError");
       expect(error.code).toBeUndefined();
       expect(error.severity).toBe(ErrorSeverity.ERROR);
-      expect(error.metadata).toEqual({});
+      expect(error.metadata).toBeUndefined();
       expect(error.cause).toBeInstanceOf(HandlerError);
       expect(error.cause?.message).toBe("Root error");
     });
@@ -71,7 +71,7 @@ describe("HandlerError", () => {
       expect(error.name).toBe("HandlerError");
       expect(error.code).toBe("VAL001");
       expect(error.severity).toBe(ErrorSeverity.ERROR);
-      expect(error.metadata).toEqual({});
+      expect(error.metadata).toBeUndefined();
       expect(error.cause).toBeUndefined();
     });
 
@@ -85,7 +85,7 @@ describe("HandlerError", () => {
       expect(error.name).toBe("HandlerError");
       expect(error.code).toBe("VAL001");
       expect(error.severity).toBe(ErrorSeverity.ERROR);
-      expect(error.metadata).toEqual({});
+      expect(error.metadata).toBeUndefined();
       expect(error.cause).toBeInstanceOf(HandlerError);
       expect(error.cause?.message).toBe("Root error");
     });
@@ -259,7 +259,7 @@ describe("HandlerError", () => {
         cause: undefined,
         id: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
         message: "Test error",
-        metadata: {},
+        metadata: undefined,
         name: "HandlerError",
         severity: ErrorSeverity.ERROR,
         timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test

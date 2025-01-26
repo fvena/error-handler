@@ -12,7 +12,7 @@ export class HandlerError extends Error {
   public readonly timestamp: Date; // Timestamp of when the error occurred
   public readonly severity: Severity; // Severity of the error
   public readonly code?: string; // Error code for the error
-  public readonly metadata: Metadata; // Additional metadata for the error
+  public readonly metadata?: Metadata; // Additional metadata for the error
   public override cause?: HandlerError; // The cause of the error
 
   /**
@@ -41,7 +41,6 @@ export class HandlerError extends Error {
     this.timestamp = new Date();
 
     this.code = undefined;
-    this.metadata = {};
 
     // Parse constructor arguments
     if (typeof argument2 === "string") {

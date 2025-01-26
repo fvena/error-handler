@@ -151,7 +151,7 @@ describe("HandlerErrorChain", () => {
         {
           id: topError.id,
           message: "Top error",
-          metadata: {},
+          metadata: undefined,
           name: "HandlerError",
           severity: ErrorSeverity.ERROR,
           timestamp: topError.timestamp.toISOString(),
@@ -159,7 +159,7 @@ describe("HandlerErrorChain", () => {
         {
           id: middleError.id,
           message: "Middle error",
-          metadata: {},
+          metadata: undefined,
           name: "HandlerError",
           severity: ErrorSeverity.ERROR,
           timestamp: middleError.timestamp.toISOString(),
@@ -167,7 +167,7 @@ describe("HandlerErrorChain", () => {
         {
           id: rootError.id,
           message: "Root error",
-          metadata: {},
+          metadata: undefined,
           name: "HandlerError",
           severity: ErrorSeverity.ERROR,
           timestamp: rootError.timestamp.toISOString(),
