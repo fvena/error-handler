@@ -265,6 +265,35 @@ describe("HandlerError", () => {
         timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
       });
     });
+
+    it("should serialize the error with all properties", () => {
+      // Arrange
+      const metadata = { key: "value" };
+      const rootError = new Error("Root error");
+      const error = new HandlerError("Test error", "VAL001", metadata, rootError);
+
+      // Act
+      const serializedError = error.serialize();
+
+      // Assert
+      expect(serializedError).toStrictEqual({
+        cause: {
+          cause: undefined,
+          id: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+          message: "Root error",
+          metadata: undefined,
+          name: "HandlerError",
+          severity: ErrorSeverity.ERROR,
+          timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+        },
+        id: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+        message: "Test error",
+        metadata: { key: "value" },
+        name: "HandlerError",
+        severity: ErrorSeverity.ERROR,
+        timestamp: expect.any(String), // eslint-disable-line @typescript-eslint/no-unsafe-assignment -- It's a test
+      });
+    });
   });
 
   describe("toString", () => {
@@ -276,7 +305,7 @@ describe("HandlerError", () => {
       const errorString = error.toString();
 
       // Assert
-      expect(errorString).toBe(`[ERROR] HandlerError: Test error (ID: ${error.id})`);
+      expect(errorString).toBe(`[ERROR] HandlerError: Test error`);
     });
   });
 });

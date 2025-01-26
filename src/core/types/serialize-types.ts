@@ -5,6 +5,7 @@ import type { Severity } from "./error-types";
  */
 export interface SerializedError {
   cause?: SerializedError;
+  code?: string;
   id: string;
   message: string;
   metadata?: Record<string, unknown>;

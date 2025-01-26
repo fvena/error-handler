@@ -1,6 +1,6 @@
 import type { HandlerError } from "../core/handler-error";
 import { BaseFormatter } from "../core/formatter-base";
-import { isHandlerError } from "../core/guards/error-guards";
+import { isHandlerError } from "../core/guards/handler-error-guards";
 
 /**
  * Default options for the HTML formatter.

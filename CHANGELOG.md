@@ -1,9 +1,8 @@
 # [1.4.0](https://github.com/fvena/handler-error/compare/v1.3.0...v1.4.0) (2025-01-24)
 
-
 ### Features
 
-* add formatters ([a1f6541](https://github.com/fvena/handler-error/commit/a1f65413bc180523b52d61bd395742cc4e9da23e))
+- add formatters ([a1f6541](https://github.com/fvena/handler-error/commit/a1f65413bc180523b52d61bd395742cc4e9da23e))
 
 # [1.3.0](https://github.com/fvena/handler-error/compare/v1.2.0...v1.3.0) (2025-01-23)
 
